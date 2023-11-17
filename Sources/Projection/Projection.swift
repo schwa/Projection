@@ -38,7 +38,9 @@ public struct GraphicsContext3D {
     public var projection: Projection3D
 
     public var rasterizer: Rasterizer {
-        return Rasterizer(graphicsContext: self)
+        var rasterizer = Rasterizer(graphicsContext: self)
+        rasterizer.drawNormals = true
+        return rasterizer
     }
 
     public init(graphicsContext2D: GraphicsContext, projection: Projection3D) {
@@ -66,7 +68,6 @@ public struct GraphicsContext3D {
                 }
             }
         }
-        print(path)
         graphicsContext2D.stroke(path, with: shading)
     }
 }
@@ -107,58 +108,89 @@ public struct Path3D {
 // MARK: -
 
 public struct Rasterizer {
-    struct ClipSpacePolygon {
-        var vertices: [SIMD4<Float>]
-        var shading: GraphicsContext.Shading
+    struct Fragment {
+        var modelSpaceVertices: [SIMD3<Float>]
+        var clipspaceVertices: [SIMD4<Float>]
         var z: Float
+        var modelSpaceNormal: SIMD3<Float>
 
-        init(vertices: [SIMD4<Float>], shading: GraphicsContext.Shading) {
-            self.vertices = vertices
+        var shading: GraphicsContext.Shading
+
+        init(vertices: [SIMD3<Float>], projection: Projection3D, shading: GraphicsContext.Shading) {
+            self.modelSpaceVertices = vertices
+            let transform = projection.clipTransform * projection.projectionTransform * projection.viewTransform
+            self.clipspaceVertices = modelSpaceVertices.map {
+                transform * SIMD4<Float>($0, 1.0)
+            }
             self.shading = shading
-            self.z = vertices.map(\.z).reduce(0, +) / Float(vertices.count)
+            self.z = clipspaceVertices.map(\.z).min()!
+            let a = (SIMD4<Float>(modelSpaceVertices[0], 1.0)).xyz
+            let b = (SIMD4<Float>(modelSpaceVertices[1], 1.0)).xyz
+            let c = (SIMD4<Float>(modelSpaceVertices[2], 1.0)).xyz
+            modelSpaceNormal = simd_normalize(simd_cross(b - a, c - a))
         }
     }
 
     public var graphicsContext: GraphicsContext3D
-    var polygons: [ClipSpacePolygon] = []
+    var fragments: [Fragment] = []
+    var drawNormals: Bool = false
 
     public mutating func submit(polygon: [SIMD3<Float>], with shading: GraphicsContext.Shading) {
-        let modelViewTransform = graphicsContext.projection.viewTransform
-        let modelViewProjectionTransform = graphicsContext.projection.projectionTransform * modelViewTransform
-        let vertices = polygon.map {
-            (graphicsContext.projection.clipTransform * modelViewProjectionTransform * SIMD4<Float>($0, 1.0))
-        }
-        polygons.append(ClipSpacePolygon(vertices: vertices, shading: shading))
+        fragments.append(Fragment(vertices: polygon, projection: graphicsContext.projection, shading: shading))
     }
 
     public mutating func rasterize() {
-        let polygons = polygons.filter {
+        let fragments = fragments
+        .filter {
             // TODO: Do actual frustrum culling.
             $0.z <= 0
         }
         .sorted { lhs, rhs in
             lhs.z < rhs.z
         }
-
-        //        let a = polygon.vertices[0].position
-        //        let b = polygon.vertices[1].position
-        //        let c = polygon.vertices[2].position
-        //        let dir = simd_normalize(simd_cross(b - a, c - a))
-        //        guard dir.z > 0 else {
-        //            return
-        //        }
-
-        for polygon in polygons {
-            let lines = polygon.vertices.map {
+        for fragment in fragments {
+            let viewSpaceNormal = (graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz
+            let backFacing = simd_dot(viewSpaceNormal, graphicsContext.projection.viewTransform.translation) < 0
+            if backFacing {
+                continue
+            }
+            let lines = fragment.clipspaceVertices.map {
                 let screenSpace = SIMD3($0.x, $0.y, $0.z) / $0.w
                 return CGPoint(x: Double(screenSpace.x), y: Double(screenSpace.y))
             }
+            
             let path = Path { path in
                 path.addLines(lines)
                 path.closeSubpath()
             }
-            graphicsContext.graphicsContext2D.fill(path, with: polygon.shading)
-            //graphicsContext.graphicsContext2D.stroke(path, with: .color(.black), style: .init(lineWidth: 1, lineCap: .round, lineJoin: .round))
+            graphicsContext.graphicsContext2D.fill(path, with: .color(viewSpaceNormal))
+            
+            if drawNormals {
+                let center = (fragment.modelSpaceVertices.reduce(.zero, +) / Float(fragment.modelSpaceVertices.count))
+                let path = Path3D { path in
+                    path.move(to: center)
+                    path.addLine(to: center + fragment.modelSpaceNormal)
+                }
+                graphicsContext.stroke(path: path, with: .color(fragment.modelSpaceNormal))
+            }
         }
+    }
+}
+
+internal extension simd_float4x4 {
+    var translation: SIMD3<Float> {
+        SIMD3<Float>(columns.3.x, columns.3.y, columns.3.z)
+    }
+}
+
+internal extension SIMD4 {
+    var xyz: SIMD3<Scalar> {
+        return [x, y, z]
+    }
+}
+
+internal extension GraphicsContext.Shading {
+    static func color(_ rgb: SIMD3<Float>) -> Self {
+        return .color(Color(red: Double(rgb.x), green: Double(rgb.y), blue: Double(rgb.z)))
     }
 }
