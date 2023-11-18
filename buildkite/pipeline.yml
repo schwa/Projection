@@ -1,0 +1,6 @@
+steps:
+    - commands:
+          - "swift package clean"
+          - "swift build"
+          - "swift test"
+          - "cd Demos; xcodebuild -scheme 'ProjectionDemo' build"
