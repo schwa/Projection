@@ -133,7 +133,7 @@ public struct Rasterizer {
 
     public var graphicsContext: GraphicsContext3D
     var fragments: [Fragment] = []
-    var drawNormals: Bool = false
+    var drawNormals = false
 
     public mutating func submit(polygon: [SIMD3<Float>], with shading: GraphicsContext.Shading) {
         fragments.append(Fragment(vertices: polygon, projection: graphicsContext.projection, shading: shading))
@@ -158,13 +158,13 @@ public struct Rasterizer {
                 let screenSpace = SIMD3($0.x, $0.y, $0.z) / $0.w
                 return CGPoint(x: Double(screenSpace.x), y: Double(screenSpace.y))
             }
-            
+
             let path = Path { path in
                 path.addLines(lines)
                 path.closeSubpath()
             }
             graphicsContext.graphicsContext2D.fill(path, with: .color(viewSpaceNormal))
-            
+
             if drawNormals {
                 let center = (fragment.modelSpaceVertices.reduce(.zero, +) / Float(fragment.modelSpaceVertices.count))
                 let path = Path3D { path in
