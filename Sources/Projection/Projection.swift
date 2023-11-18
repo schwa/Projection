@@ -39,7 +39,7 @@ public struct GraphicsContext3D {
 
     public var rasterizer: Rasterizer {
         var rasterizer = Rasterizer(graphicsContext: self)
-        rasterizer.drawNormals = true
+        //rasterizer.drawNormals = true
         return rasterizer
     }
 
@@ -110,8 +110,8 @@ public struct Path3D {
 public struct Rasterizer {
     struct Fragment {
         var modelSpaceVertices: [SIMD3<Float>]
-        var clipspaceVertices: [SIMD4<Float>]
-        var z: Float
+        var clipSpaceVertices: [SIMD4<Float>]
+        var clipSpaceZ: Float
         var modelSpaceNormal: SIMD3<Float>
 
         var shading: GraphicsContext.Shading
@@ -119,15 +119,16 @@ public struct Rasterizer {
         init(vertices: [SIMD3<Float>], projection: Projection3D, shading: GraphicsContext.Shading) {
             self.modelSpaceVertices = vertices
             let transform = projection.clipTransform * projection.projectionTransform * projection.viewTransform
-            self.clipspaceVertices = modelSpaceVertices.map {
+            self.clipSpaceVertices = modelSpaceVertices.map {
                 transform * SIMD4<Float>($0, 1.0)
             }
-            self.shading = shading
-            self.z = clipspaceVertices.map(\.z).min()!
-            let a = (SIMD4<Float>(modelSpaceVertices[0], 1.0)).xyz
-            let b = (SIMD4<Float>(modelSpaceVertices[1], 1.0)).xyz
-            let c = (SIMD4<Float>(modelSpaceVertices[2], 1.0)).xyz
+            self.clipSpaceZ = clipSpaceVertices.map(\.z).min()!
+            let a = modelSpaceVertices[0]
+            let b = modelSpaceVertices[1]
+            let c = modelSpaceVertices[2]
             modelSpaceNormal = simd_normalize(simd_cross(b - a, c - a))
+
+            self.shading = shading
         }
     }
 
@@ -143,10 +144,10 @@ public struct Rasterizer {
         let fragments = fragments
         .filter {
             // TODO: Do actual frustrum culling.
-            $0.z <= 0
+            $0.clipSpaceZ <= 0
         }
         .sorted { lhs, rhs in
-            lhs.z < rhs.z
+            lhs.clipSpaceZ < rhs.clipSpaceZ
         }
         for fragment in fragments {
             let viewSpaceNormal = (graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz
@@ -154,7 +155,7 @@ public struct Rasterizer {
             if backFacing {
                 continue
             }
-            let lines = fragment.clipspaceVertices.map {
+            let lines = fragment.clipSpaceVertices.map {
                 let screenSpace = SIMD3($0.x, $0.y, $0.z) / $0.w
                 return CGPoint(x: Double(screenSpace.x), y: Double(screenSpace.y))
             }
