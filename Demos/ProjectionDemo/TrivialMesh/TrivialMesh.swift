@@ -1,12 +1,12 @@
 import simd
 
-struct TrivialMesh <Index, Vertex> where Index: UnsignedInteger & BinaryInteger, Vertex: Equatable {
+struct TrivialMesh<Index, Vertex> where Index: UnsignedInteger & BinaryInteger, Vertex: Equatable {
     var indices: [Index]
     var vertices: [Vertex]
 
     init() {
-        self.indices = []
-        self.vertices = []
+        indices = []
+        vertices = []
     }
 
     init(indices: [Index], vertices: [Vertex]) {
@@ -36,15 +36,14 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
     init(triangles: [Triangle<SIMD3<Float>>]) {
         self.init()
         for triangle in triangles {
-            self.append(vertex: triangle.vertices.0)
-            self.append(vertex: triangle.vertices.1)
-            self.append(vertex: triangle.vertices.2)
+            append(vertex: triangle.vertices.0)
+            append(vertex: triangle.vertices.1)
+            append(vertex: triangle.vertices.2)
         }
     }
 }
 
 extension TrivialMesh {
-
     init(merging meshes: [TrivialMesh]) {
         self = meshes.reduce(into: TrivialMesh()) { result, mesh in
             let offset = result.vertices.count

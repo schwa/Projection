@@ -2,7 +2,7 @@ import Foundation
 
 extension TrivialMesh where Vertex == SIMD3<Float> {
     func toPLY() -> String {
-        //let vertices = polygons.flatMap { $0.vertices }
+        // let vertices = polygons.flatMap { $0.vertices }
         let faces: [[Int]] = indices.chunks(ofCount: 3).map { $0.map { Int($0) }}
 
         var s = ""
@@ -13,7 +13,7 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
             (.float, "x"), (.float, "y"), (.float, "z"),
         ], to: &s)
         encoder.encodeElementDefinition(name: "face", count: faces.count, properties: [
-            (.list(count: .uchar, element: .int), "vertex_indices")
+            (.list(count: .uchar, element: .int), "vertex_indices"),
         ], to: &s)
         encoder.encodeEndHeader(to: &s)
 
@@ -33,8 +33,8 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
 
 extension TrivialMesh where Vertex == SimpleVertex {
     func toPLY() -> String {
-        //let vertices = polygons.flatMap { $0.vertices }
-        let faces: [[Int]] = indices.chunks(ofCount: 3).map { $0.map { Int($0) }}
+        // let vertices = polygons.flatMap { $0.vertices }
+        let faces: [[Int]] = indices.chunks(ofCount: 3).map { $0.map { Int($0) } }
 
         var s = ""
         let encoder = PlyEncoder()
@@ -45,7 +45,7 @@ extension TrivialMesh where Vertex == SimpleVertex {
             (.float, "nx"), (.float, "ny"), (.float, "nz"),
         ], to: &s)
         encoder.encodeElementDefinition(name: "face", count: faces.count, properties: [
-            (.list(count: .uchar, element: .int), "vertex_indices")
+            (.list(count: .uchar, element: .int), "vertex_indices"),
         ], to: &s)
         encoder.encodeEndHeader(to: &s)
 

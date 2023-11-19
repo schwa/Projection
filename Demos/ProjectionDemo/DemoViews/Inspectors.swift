@@ -1,9 +1,9 @@
+import CoreGraphicsSupport
 import Foundation
-import SwiftUI
+import simd
 import SIMDSupport
 import SwiftFormats
-import CoreGraphicsSupport
-import simd
+import SwiftUI
 
 struct CameraInspector: View {
     @Binding
@@ -29,8 +29,8 @@ struct ProjectionInspector: View {
     var projection: Projection
 
     init(projection: Binding<Projection>) {
-        self.type = projection.wrappedValue.meta
-        self._projection = projection
+        type = projection.wrappedValue.meta
+        _projection = projection
     }
 
     var body: some View {
@@ -56,14 +56,14 @@ struct ProjectionInspector: View {
         switch projection {
         case .matrix(let projection):
             let projection = Binding {
-                return projection
+                projection
             } set: { newValue in
                 self.projection = .matrix(newValue)
             }
             Text("UNIMPLEMENTED")
         case .perspective(let projection):
             let projection = Binding {
-                return projection
+                projection
             } set: { newValue in
                 self.projection = .perspective(newValue)
             }
@@ -71,12 +71,12 @@ struct ProjectionInspector: View {
             HStack {
                 let binding = Binding<SwiftUI.Angle>(radians: projection.fovy.radians)
                 TextField("FOVY", value: binding, format: .angle)
-                //SliderPopoverButton(value: projection.fovy.degrees, in: 0...180, minimumValueLabel: { Image(systemName: "field.of.view.wide") }, maximumValueLabel: { Image(systemName: "field.of.view.ultrawide") })
+                // SliderPopoverButton(value: projection.fovy.degrees, in: 0...180, minimumValueLabel: { Image(systemName: "field.of.view.wide") }, maximumValueLabel: { Image(systemName: "field.of.view.ultrawide") })
             }
             TextField("Clipping Distance", value: projection.zClip, format: ClosedRangeFormatStyle(substyle: .number))
         case .orthographic(let projection):
             let projection = Binding {
-                return projection
+                projection
             } set: { newValue in
                 self.projection = .orthographic(newValue)
             }
@@ -104,7 +104,7 @@ struct TransformEditor: View {
     let options: Options
 
     init(transform: Binding<Transform>, options: Options = .default) {
-        self._transform = transform
+        _transform = transform
         self.options = options
     }
 
@@ -118,7 +118,6 @@ struct TransformEditor: View {
 }
 
 struct MapInspector: View {
-
     @Binding
     var camera: Camera
 
@@ -138,19 +137,12 @@ struct MapInspector: View {
             let cameraPosition = CGPoint(camera.transform.translation.xz) * [5, 5]
             context.fill(Path(ellipseIn: CGRect(center: cameraPosition, radius: 4)), with: .color(.yellow))
 
-
             context.stroke(Path { path in
-
                 path.move(to: cameraPosition)
-
                 let unit = camera.transform.matrix * SIMD4<Float>(0, 1, 0, -1)
-
-
 //                path.addLine(to: cameraPosition + CGPoint(unit.xz) * -2)
                 path.addLine(to: CGPoint(unit.xz) * 2, relative: true)
             }, with: .color(.yellow), lineWidth: 2)
-
-
         }
         .background(.black)
     }

@@ -1,5 +1,5 @@
-import SwiftUI
 import CoreGraphicsSupport
+import SwiftUI
 
 struct BoxesView: View {
     @State
@@ -14,11 +14,11 @@ struct BoxesView: View {
     }
 
     var body: some View {
-        SoftwareRendererView { projection, context2D, context3D in
+        SoftwareRendererView { _, _, context3D in
             var rasterizer = context3D.rasterizer
             for model in models {
                 for (index, polygon) in model.toPolygons().enumerated() {
-                    rasterizer.submit(polygon: polygon.vertices.map { $0.position }, with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
+                    rasterizer.submit(polygon: polygon.vertices.map(\.position), with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
                 }
             }
 

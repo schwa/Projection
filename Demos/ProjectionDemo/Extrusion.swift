@@ -1,5 +1,5 @@
-import CoreGraphicsSupport
 import Algorithms
+import CoreGraphicsSupport
 import earcut
 import UniformTypeIdentifiers
 
@@ -17,7 +17,7 @@ extension PolygonalChain where Point == CGPoint {
             ))
             result.append(quad)
         }
-        let mesh = TrivialMesh<UInt,SIMD3<Float>>(quads: quads)
+        let mesh = TrivialMesh<UInt, SIMD3<Float>>(quads: quads)
         return mesh
     }
 }
@@ -32,7 +32,7 @@ extension Polygon where Vertex == CGPoint {
 
     func triangulate(z: Float = 0) -> TrivialMesh<UInt, SIMD3<Float>> {
         let vertices = vertices.map { SIMD3<Float>(Float($0.x), Float($0.y), z) }
-        let indices = earcut(polygons: [vertices.map { $0.xy }]).map({ UInt($0) })
+        let indices = earcut(polygons: [vertices.map(\.xy)]).map({ UInt($0) })
         return TrivialMesh(indices: indices, vertices: vertices)
     }
 }

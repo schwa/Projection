@@ -1,7 +1,7 @@
-import simd
 import CoreGraphics
+import simd
 
-struct Box <Point: PointLike> {
+struct Box<Point: PointLike> {
     var min: Point
     var max: Point
 
@@ -13,7 +13,7 @@ struct Box <Point: PointLike> {
 
 // MARK: -
 
-struct Line <Point: PointLike> {
+struct Line<Point: PointLike> {
     var point: Point
     var direction: Point // TODO: Vector not Point.
 
@@ -32,10 +32,10 @@ extension Line {
 
 // MARK: -
 
-struct LineSegment <Point: PointLike> {
+struct LineSegment<Point: PointLike> {
     var start: Point
     var end: Point
-    
+
     init(start: Point, end: Point) {
         self.start = start
         self.end = end
@@ -115,7 +115,7 @@ extension Polygon where Vertex: VertexLike3 {
             return vertex
         }
     }
-    
+
     func flipped() -> Self {
         var copy = self
         copy.flip()
@@ -143,13 +143,13 @@ extension Polygon where Vertex: PointLike {
 
 // MARK: -
 
-struct PolygonalChain <Point> {
+struct PolygonalChain<Point> {
     var vertices: [Point]
-    
+
     init() {
-        self.vertices = []
+        vertices = []
     }
-    
+
     init(vertices: [Point]) {
         self.vertices = vertices
     }
@@ -159,11 +159,11 @@ extension PolygonalChain where Point: PointLike {
     var isClosed: Bool {
         vertices.first == vertices.last
     }
-    
+
     var segments: [LineSegment<Point>] {
         zip(vertices, vertices.dropFirst()).map(LineSegment.init)
     }
-    
+
     var isSelfIntersecting: Bool {
         fatalError()
     }
@@ -186,15 +186,15 @@ extension PolygonalChain where Point == SIMD3<Float> {
 
 extension PolygonalChain {
     init(polygon: Polygon<Point>) {
-        self.vertices = polygon.vertices + [polygon.vertices[0]]
+        vertices = polygon.vertices + [polygon.vertices[0]]
     }
 }
 
 // MARK: -
 
-struct Quad <Point: PointLike> {
+struct Quad<Point: PointLike> {
     var vertices: (Point, Point, Point, Point)
-    
+
     init(vertices: (Point, Point, Point, Point)) {
         self.vertices = vertices
     }
@@ -207,7 +207,7 @@ extension Quad {
         // | \ |
         // |  \|
         // 0---2
-        return (
+        (
             Triangle(vertices: (vertices.0, vertices.1, vertices.2)),
             Triangle(vertices: (vertices.1, vertices.3, vertices.2))
         )
@@ -240,9 +240,9 @@ struct Sphere {
 
 // MARK: -
 
-struct Triangle <Point: PointLike> {
+struct Triangle<Point: PointLike> {
     var vertices: (Point, Point, Point)
-    
+
     init(vertices: (Point, Point, Point)) {
         self.vertices = vertices
     }
@@ -250,6 +250,6 @@ struct Triangle <Point: PointLike> {
 
 extension Triangle {
     var reversed: Triangle {
-        return .init(vertices: (vertices.2, vertices.1, vertices.0))
+        .init(vertices: (vertices.2, vertices.1, vertices.0))
     }
 }

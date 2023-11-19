@@ -65,11 +65,11 @@ public struct PlyEncoder {
     }
 
     public func encodeElement(_ values: [Value], to output: inout Output) {
-        print(values.map { $0.description }.joined(separator: " "), to: &output)
+        print(values.map(\.description).joined(separator: " "), to: &output)
     }
 
     public func encodeListElement(_ values: [Value], to output: inout Output) {
-        print("\(values.count) \(values.map { $0.description }.joined(separator: " "))", to: &output)
+        print("\(values.count) \(values.map(\.description).joined(separator: " "))", to: &output)
     }
 }
 
@@ -88,21 +88,21 @@ extension PlyEncoder.Value: CustomStringConvertible {
     public var description: String {
         switch self {
         case .char(let value):
-            return "\(value)"
+            "\(value)"
         case .uchar(let value):
-            return "\(value)"
+            "\(value)"
         case .short(let value):
-            return "\(value)"
+            "\(value)"
         case .ushort(let value):
-            return "\(value)"
+            "\(value)"
         case .int(let value):
-            return "\(value)"
+            "\(value)"
         case .uint(let value):
-            return "\(value)"
+            "\(value)"
         case .float(let value):
-            return "\(value)"
+            "\(value)"
         case .double(let value):
-            return "\(value)"
+            "\(value)"
         }
     }
 }

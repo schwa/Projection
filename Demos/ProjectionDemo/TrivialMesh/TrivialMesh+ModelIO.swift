@@ -1,13 +1,12 @@
-import SwiftUI
-import SIMDSupport
-import Projection
-import ModelIO
 import Algorithms
 import CoreGraphicsSupport
+import ModelIO
+import Projection
+import SIMDSupport
 import SwiftFormats
+import SwiftUI
 
 extension TrivialMesh where Index == UInt32, Vertex == SIMD3<Float> {
-
     init(url: URL) throws {
         let asset = MDLAsset(url: url)
         let mesh = asset.object(at: 0) as! MDLMesh

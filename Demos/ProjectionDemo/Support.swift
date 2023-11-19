@@ -1,8 +1,8 @@
-import simd
-import SwiftUI
 import CoreGraphics
 import CoreGraphicsSupport
+import simd
 import SIMDSupport
+import SwiftUI
 
 public struct Camera {
     public var transform: Transform
@@ -12,6 +12,7 @@ public struct Camera {
             transform = Transform(look(at: position + target, from: position, up: [0, 1, 0]))
         }
     }
+
     public var projection: Projection
 
     public init(transform: Transform, target: SIMD3<Float>, projection: Projection) {
@@ -40,7 +41,7 @@ public extension Camera {
     }
 }
 
-extension Array where Element == LineSegment<CGPoint> {
+extension [LineSegment<CGPoint>] {
     func extrude(minY: Float, maxY: Float) -> TrivialMesh<UInt, SIMD3<Float>> {
         var quads: [Quad<SIMD3<Float>>] = []
         forEach { segment in
@@ -54,21 +55,21 @@ extension Array where Element == LineSegment<CGPoint> {
             ))
             quads.append(quad)
         }
-        let mesh = TrivialMesh<UInt,SIMD3<Float>>(quads: quads)
+        let mesh = TrivialMesh<UInt, SIMD3<Float>>(quads: quads)
         return mesh
     }
 }
 
-//extension Path {
+// extension Path {
 //    func scaled(x: CGFloat, y: CGFloat) -> Path {
 //        let transform = CGAffineTransform(translationX: -boundingRect.midX, y: -boundingRect.midY)
 //            .concatenating(CGAffineTransform(scaleX: x, y: y))
 //            .concatenating(CGAffineTransform(translationX: boundingRect.midX, y: boundingRect.midY))
 //        return applying(transform)
 //    }
-//}
+// }
 
-//extension Array where Element == CGPoint {
+// extension Array where Element == CGPoint {
 //    var rectangleAndAngle: (CGRect, Angle)? {
 //        guard count == 4 else {
 //            return nil
@@ -95,9 +96,9 @@ extension Array where Element == LineSegment<CGPoint> {
 //        let transform = CGAffineTransform(rotationAngle: angle.radians)
 //        return map { $0.applying(transform) }
 //    }
-//}
+// }
 
-//extension CGRect {
+// extension CGRect {
 //    init(points: [CGPoint]) {
 //        guard let first = points.first else {
 //            self = .null
@@ -127,31 +128,30 @@ extension Array where Element == LineSegment<CGPoint> {
 ////            $0.applying(transform)
 ////        }
 ////    }
-//}
+// }
 
-extension Array where Element == LineSegment<CGPoint> {
+extension [LineSegment<CGPoint>] {
     var polygon: [CGPoint] {
         guard let first else {
             return []
         }
-        return [first.start] + dropFirst().map { $0.end }
+        return [first.start] + dropFirst().map(\.end)
     }
 }
 
 extension Array {
     var mutableLast: Element? {
         get {
-            return last
+            last
         }
         set {
             precondition(last != nil)
             if let newValue {
-                self[self.index(before: endIndex)] = newValue
+                self[index(before: endIndex)] = newValue
             }
             else {
-                _ = self.popLast()
+                _ = popLast()
             }
         }
     }
 }
-

@@ -1,5 +1,5 @@
-import RealityKit
 import ModelIO
+import RealityKit
 import SIMDSupport
 
 extension ModelComponent {
@@ -15,7 +15,7 @@ extension ModelComponent {
 extension MDLMesh {
     convenience init(mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SIMD3<Float>>) {
         let vertexBuffer = mesh.vertices.map(PackedFloat3.init).withUnsafeBytes { buffer in
-            return MDLMeshBufferData(type: .vertex, data: Data(buffer))
+            MDLMeshBufferData(type: .vertex, data: Data(buffer))
         }
         let descriptor = MDLVertexDescriptor()
         descriptor.addOrReplaceAttribute(.init(name: MDLVertexAttributePosition, format: .float3, offset: 0, bufferIndex: 0))
@@ -24,19 +24,19 @@ extension MDLMesh {
         let indexType: MDLIndexBitDepth
         let indexBuffer: MDLMeshBuffer
         switch mesh.indices.count {
-        case 0..<256:
+        case 0 ..< 256:
             indexType = .uInt8
             let indices = mesh.indices.map({ UInt8($0) })
             indexBuffer = indices.withUnsafeBytes { buffer in
                 MDLMeshBufferData(type: .index, data: Data(buffer))
             }
-        case 256..<65536:
+        case 256 ..< 65536:
             indexType = .uInt16
             let indices = mesh.indices.map({ UInt16($0) })
             indexBuffer = indices.withUnsafeBytes { buffer in
                 MDLMeshBufferData(type: .index, data: Data(buffer))
             }
-        case 65536..<4_294_967_296:
+        case 65536 ..< 4_294_967_296:
             indexType = .uInt32
             let indices = mesh.indices.map({ UInt32($0) })
             indexBuffer = indices.withUnsafeBytes { buffer in

@@ -1,9 +1,9 @@
-import SwiftUI
-import CoreGraphicsSupport
 import Algorithms
-import Everything
-import earcut
+import CoreGraphicsSupport
 import CoreText
+import earcut
+import Everything
+import SwiftUI
 import UniformTypeIdentifiers
 
 extension UTType {
@@ -11,7 +11,6 @@ extension UTType {
 }
 
 struct ExtrusionView: View {
-
     @State
     var meshes: [TrivialMesh<UInt, SIMD3<Float>>]
 
@@ -23,7 +22,7 @@ struct ExtrusionView: View {
 
     init() {
         let path = Path(CGSize(1, 1))
-        let polygons = path.polygonalChains.filter { $0.isClosed }.map { Polygon(polygonalChain: $0)}
+        let polygons = path.polygonalChains.filter(\.isClosed).map { Polygon(polygonalChain: $0) }
         let meshes = polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) }
         self.meshes = meshes
         source = TrivialMesh(merging: meshes).toPLY()
@@ -31,7 +30,7 @@ struct ExtrusionView: View {
 
     var body: some View {
         TabView {
-            SoftwareRendererView { projection, context2D, context3D in
+            SoftwareRendererView { _, _, context3D in
                 for mesh in meshes {
                     var rasterizer = context3D.rasterizer
                     for (index, polygon) in mesh.toPolygons().enumerated() {
@@ -44,13 +43,12 @@ struct ExtrusionView: View {
                 Text("Model")
             }
 
-
             Text(verbatim: source)
-            .monospaced()
-            .textSelection(.enabled)
-            .tabItem {
-                Text("PLY")
-            }
+                .monospaced()
+                .textSelection(.enabled)
+                .tabItem {
+                    Text("PLY")
+                }
         }
         .toolbar {
             Button("Export") {
@@ -63,10 +61,21 @@ struct ExtrusionView: View {
     }
 }
 
-//let font = CTFontCreateWithName("Apple Color Emoji" as CFString, 20, nil)
-//let glyph = CTFontGetGlyphWithName(font, "numbersign" as CFString)
-//let cgPath = CTFontCreatePathForGlyph(font, glyph, nil)!
-//let path = Path(cgPath)
+extension Path {
+    static func star(sides: N, innerRadius: Double, outerRadius: Double) -> Path {
+        let points = (0 ..< sides).map { i -> CGPoint in
+            let angle = 2 * .pi * Double(i) / Double(sides)
+            let radius = i.isMultiple(of: 2) ? innerRadius : outerRadius
+            return CGPoint(x: radius * cos(angle), y: radius * sin(angle))
+        }
+        return Path(points)
+    }
+}
+
+// let font = CTFontCreateWithName("Apple Color Emoji" as CFString, 20, nil)
+// let glyph = CTFontGetGlyphWithName(font, "numbersign" as CFString)
+// let cgPath = CTFontCreatePathForGlyph(font, glyph, nil)!
+// let path = Path(cgPath)
 //            for x in 0..<65535 {
 //                let name = CTFontCopyNameForGlyph(font, UInt16(x))
 //                if let name {
