@@ -36,16 +36,16 @@ public extension GraphicsContext {
 public struct GraphicsContext3D {
     public var graphicsContext2D: GraphicsContext
     public var projection: Projection3D
+    public var rasterizerOptions: Rasterizer.Options
 
     public var rasterizer: Rasterizer {
-        var rasterizer = Rasterizer(graphicsContext: self)
-        //rasterizer.drawNormals = true
-        return rasterizer
+        Rasterizer(graphicsContext: self, options: rasterizerOptions)
     }
 
     public init(graphicsContext2D: GraphicsContext, projection: Projection3D) {
         self.graphicsContext2D = graphicsContext2D
         self.projection = projection
+        self.rasterizerOptions = .default
     }
 
     public func stroke(path: Path3D, with shading: GraphicsContext.Shading) {
@@ -108,6 +108,19 @@ public struct Path3D {
 // MARK: -
 
 public struct Rasterizer {
+
+    public struct Options {
+        public var drawNormals = false
+        public var shadeFragmentsWithNormals = false
+        public var fill = true
+        public var stroke = false
+
+        public static var `default`: Self {
+            return .init()
+        }
+    }
+
+
     struct Fragment {
         var modelSpaceVertices: [SIMD3<Float>]
         var clipSpaceVertices: [SIMD4<Float>]
@@ -134,7 +147,7 @@ public struct Rasterizer {
 
     public var graphicsContext: GraphicsContext3D
     var fragments: [Fragment] = []
-    var drawNormals = false
+    public var options: Options
 
     public mutating func submit(polygon: [SIMD3<Float>], with shading: GraphicsContext.Shading) {
         fragments.append(Fragment(vertices: polygon, projection: graphicsContext.projection, shading: shading))
@@ -164,9 +177,17 @@ public struct Rasterizer {
                 path.addLines(lines)
                 path.closeSubpath()
             }
-            graphicsContext.graphicsContext2D.fill(path, with: .color(viewSpaceNormal))
 
-            if drawNormals {
+            let shading = !options.shadeFragmentsWithNormals ? fragment.shading : .color(fragment.modelSpaceNormal)
+
+            if options.fill {
+                graphicsContext.graphicsContext2D.fill(path, with: shading)
+            }
+            if options.stroke {
+                graphicsContext.graphicsContext2D.stroke(path, with: shading, style: .init(lineCap: .round))
+            }
+
+            if options.drawNormals {
                 let center = (fragment.modelSpaceVertices.reduce(.zero, +) / Float(fragment.modelSpaceVertices.count))
                 let path = Path3D { path in
                     path.move(to: center)

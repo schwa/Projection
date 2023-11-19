@@ -18,15 +18,15 @@ struct SoftwareRendererView: View {
 
     @State
     var pitchLimit: ClosedRange<SwiftUI.Angle> = .degrees(-.infinity) ... .degrees(.infinity)
-    
+
     @State
     var yawLimit: ClosedRange<SwiftUI.Angle> = .degrees(-.infinity) ... .degrees(.infinity)
-    
+
     @State
-    var drawNormals: Bool = false
-    
+    var rasterizerOptions: Rasterizer.Options = .default
+
     var renderer: (Projection3D, inout GraphicsContext, inout GraphicsContext3D) -> Void
-    
+
     init(renderer: @escaping (Projection3D, inout GraphicsContext, inout GraphicsContext3D) -> Void) {
         camera = Camera(transform: .translation([0, 0, -5]), target: [0, 0, 0], projection: .perspective(.init(fovy: .degrees(90), zClip: 0.01 ... 1000.0)))
         modelTransform = .init(rotation: .init(angle: .degrees(0), axis: [0, 1, 0]))
@@ -54,7 +54,7 @@ struct SoftwareRendererView: View {
                     path.move(to: [0, 0, -5])
                     path.addLine(to: [0, 0, 5])
                 }, with: .color(.blue))
-                
+
                 if let symbol = context.resolveSymbol(id: "-X") {
                     context.draw(symbol, at: projection.project([-5, 0, 0]))
                 }
@@ -75,6 +75,7 @@ struct SoftwareRendererView: View {
                 }
             }
             context.draw3DLayer(projection: projection) { context, context3D in
+                context3D.rasterizerOptions = rasterizerOptions
                 renderer(projection, &context, &context3D)
             }
         }
@@ -95,8 +96,11 @@ struct SoftwareRendererView: View {
                 LabeledContent("Map") {
                     MapInspector(camera: $camera, models: []).aspectRatio(1, contentMode: .fill)
                 }
-                LabeledContent("Renderer") {
-                    Toggle("Draw Normals", isOn: $drawNormals)
+                LabeledContent("Rasterizer") {
+                    Toggle("Draw Normals", isOn: $rasterizerOptions.drawNormals)
+                    Toggle("Shade Normals", isOn: $rasterizerOptions.shadeFragmentsWithNormals)
+                    Toggle("Fill", isOn: $rasterizerOptions.fill)
+                    Toggle("Stroke", isOn: $rasterizerOptions.stroke)
                 }
                 LabeledContent("Track Ball") {
                     TextField("Pitch Limit", value: $pitchLimit, format: ClosedRangeFormatStyle(substyle: .angle))

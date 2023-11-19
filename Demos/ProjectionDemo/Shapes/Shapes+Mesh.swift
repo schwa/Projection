@@ -7,12 +7,6 @@ protocol PolygonConvertable {
 protocol MeshConvertable {
     func toMesh() -> TrivialMesh<UInt, SIMD3<Float>>
 }
-//
-//public extension PolygonConvertable {
-//    func toCSG() -> CSG<SimpleVertex> {
-//        return CSG(polygons: toPolygons())
-//    }
-//}
 
 extension Box: PolygonConvertable where Point == SIMD3<Float> {
     func toPolygons() -> [Polygon<SimpleVertex>] {
