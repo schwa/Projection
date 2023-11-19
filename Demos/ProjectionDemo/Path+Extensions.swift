@@ -48,33 +48,3 @@ extension Path {
         }
     }
 }
-
-extension Path {
-    func render(transform: CGAffineTransform = .identity) -> [LineSegment<CGPoint>] {
-        var segments: [LineSegment<CGPoint>] = []
-        var subpathStart: CGPoint?
-        var currentPoint: CGPoint = .zero
-        forEach { element in
-            switch element {
-            case .move(to: let to):
-                currentPoint = to
-            case .line(to: let to):
-                if subpathStart == nil {
-                    subpathStart = currentPoint
-                }
-                segments.append(LineSegment(start: currentPoint.applying(transform), end: to.applying(transform)))
-                currentPoint = to
-            case .quadCurve:
-                fatalError("Got a quadCurve i can't handle")
-            case .curve:
-                fatalError("Got a curve i can't handle")
-            case .closeSubpath:
-                if let subpathStart {
-                    segments.append(LineSegment(start: currentPoint.applying(transform), end: subpathStart.applying(transform)))
-                }
-                subpathStart = nil
-            }
-        }
-        return segments
-    }
-}

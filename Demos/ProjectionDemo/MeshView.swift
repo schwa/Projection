@@ -2,7 +2,7 @@ import SwiftUI
 import CoreGraphicsSupport
 import Projection
 
-struct TeapotView: View {
+struct MeshView: View {
 
     static let models = ["Teapot", "Monkey"]
 

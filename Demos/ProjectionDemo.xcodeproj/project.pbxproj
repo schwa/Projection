@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4504788B2B0A9E6F00267CA8 /* Monkey.ply in Resources */ = {isa = PBXBuildFile; fileRef = 4504788A2B0A9E6F00267CA8 /* Monkey.ply */; };
 		4504788D2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504788C2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift */; };
+		4504788F2B0AB69D00267CA8 /* MeshView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504788E2B0AB69D00267CA8 /* MeshView.swift */; };
+		450478912B0AB6D100267CA8 /* PLYEncoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450478902B0AB6D100267CA8 /* PLYEncoder.swift */; };
+		450478932B0AB6FF00267CA8 /* TrivialMesh+Export.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450478922B0AB6FF00267CA8 /* TrivialMesh+Export.swift */; };
 		4517B4B62B093D78008A0863 /* BoxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4517B4B52B093D78008A0863 /* BoxesView.swift */; };
 		4522997D2B07DC3C00812D1A /* ProjectionDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4522997C2B07DC3C00812D1A /* ProjectionDemoApp.swift */; };
 		4522997F2B07DC3C00812D1A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4522997E2B07DC3C00812D1A /* ContentView.swift */; };
@@ -25,7 +28,6 @@
 		452299A52B07E1C400812D1A /* BallRotationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299A42B07E1C400812D1A /* BallRotationModifier.swift */; };
 		452299A82B07E2A900812D1A /* Everything in Frameworks */ = {isa = PBXBuildFile; productRef = 452299A72B07E2A900812D1A /* Everything */; };
 		452299AE2B07E3F200812D1A /* Teapot.ply in Resources */ = {isa = PBXBuildFile; fileRef = 452299AD2B07E3F200812D1A /* Teapot.ply */; };
-		452299B32B07E74700812D1A /* Path+Extrusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299B02B07E74700812D1A /* Path+Extrusion.swift */; };
 		452299B42B07E74700812D1A /* TrivialMesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299B12B07E74700812D1A /* TrivialMesh.swift */; };
 		452299B72B07E77B00812D1A /* earcut in Frameworks */ = {isa = PBXBuildFile; productRef = 452299B62B07E77B00812D1A /* earcut */; };
 		452299BA2B07ED8500812D1A /* TrivialMesh+Tesselation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299B92B07ED8500812D1A /* TrivialMesh+Tesselation.swift */; };
@@ -35,15 +37,18 @@
 		452299C52B07FBA800812D1A /* Shapes+Mesh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299C42B07FBA800812D1A /* Shapes+Mesh.swift */; };
 		452299C72B07FBFF00812D1A /* VertexLike.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299C62B07FBFF00812D1A /* VertexLike.swift */; };
 		452299C92B08063D00812D1A /* ExtrusionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299C82B08063D00812D1A /* ExtrusionView.swift */; };
-		452299CB2B0806D600812D1A /* TeapotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CA2B0806D600812D1A /* TeapotView.swift */; };
 		452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CC2B08103B00812D1A /* Path+Extensions.swift */; };
 		452299CF2B0832B900812D1A /* Inspectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CE2B0832B900812D1A /* Inspectors.swift */; };
 		452299D22B0832E100812D1A /* SwiftFormats in Frameworks */ = {isa = PBXBuildFile; productRef = 452299D12B0832E100812D1A /* SwiftFormats */; };
+		45F6E26C2B0ACB1D000D93DB /* Extrusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6E26B2B0ACB1D000D93DB /* Extrusion.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4504788A2B0A9E6F00267CA8 /* Monkey.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.ply; sourceTree = "<group>"; };
 		4504788C2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrivialMesh+ModelIO.swift"; sourceTree = "<group>"; };
+		4504788E2B0AB69D00267CA8 /* MeshView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeshView.swift; sourceTree = "<group>"; };
+		450478902B0AB6D100267CA8 /* PLYEncoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PLYEncoder.swift; sourceTree = "<group>"; };
+		450478922B0AB6FF00267CA8 /* TrivialMesh+Export.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrivialMesh+Export.swift"; sourceTree = "<group>"; };
 		4517B4B52B093D78008A0863 /* BoxesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxesView.swift; sourceTree = "<group>"; };
 		452299792B07DC3C00812D1A /* ProjectionDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectionDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4522997C2B07DC3C00812D1A /* ProjectionDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectionDemoApp.swift; sourceTree = "<group>"; };
@@ -57,7 +62,6 @@
 		452299A22B07DE4100812D1A /* Shapes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shapes.swift; sourceTree = "<group>"; };
 		452299A42B07E1C400812D1A /* BallRotationModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallRotationModifier.swift; sourceTree = "<group>"; };
 		452299AD2B07E3F200812D1A /* Teapot.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Teapot.ply; sourceTree = "<group>"; };
-		452299B02B07E74700812D1A /* Path+Extrusion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Path+Extrusion.swift"; sourceTree = "<group>"; };
 		452299B12B07E74700812D1A /* TrivialMesh.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrivialMesh.swift; sourceTree = "<group>"; };
 		452299B92B07ED8500812D1A /* TrivialMesh+Tesselation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrivialMesh+Tesselation.swift"; sourceTree = "<group>"; };
 		452299BB2B07EDC900812D1A /* TrivialMesh+Conversion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrivialMesh+Conversion.swift"; sourceTree = "<group>"; };
@@ -65,9 +69,10 @@
 		452299C42B07FBA800812D1A /* Shapes+Mesh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shapes+Mesh.swift"; sourceTree = "<group>"; };
 		452299C62B07FBFF00812D1A /* VertexLike.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VertexLike.swift; sourceTree = "<group>"; };
 		452299C82B08063D00812D1A /* ExtrusionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrusionView.swift; sourceTree = "<group>"; };
-		452299CA2B0806D600812D1A /* TeapotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeapotView.swift; sourceTree = "<group>"; };
 		452299CC2B08103B00812D1A /* Path+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Path+Extensions.swift"; sourceTree = "<group>"; };
 		452299CE2B0832B900812D1A /* Inspectors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspectors.swift; sourceTree = "<group>"; };
+		45F6E26A2B0AC501000D93DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		45F6E26B2B0ACB1D000D93DB /* Extrusion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extrusion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,10 +114,11 @@
 		4522997B2B07DC3C00812D1A /* ProjectionDemo */ = {
 			isa = PBXGroup;
 			children = (
+				45F6E26A2B0AC501000D93DB /* Info.plist */,
 				4522997C2B07DC3C00812D1A /* ProjectionDemoApp.swift */,
 				4522997E2B07DC3C00812D1A /* ContentView.swift */,
 				4522998E2B07DC8B00812D1A /* SoftwareRendererView.swift */,
-				452299CA2B0806D600812D1A /* TeapotView.swift */,
+				4504788E2B0AB69D00267CA8 /* MeshView.swift */,
 				452299C82B08063D00812D1A /* ExtrusionView.swift */,
 				4517B4B52B093D78008A0863 /* BoxesView.swift */,
 				4522999E2B07DDB200812D1A /* Support.swift */,
@@ -121,7 +127,7 @@
 				452299A02B07DE1200812D1A /* Projections.swift */,
 				452299A42B07E1C400812D1A /* BallRotationModifier.swift */,
 				452299CC2B08103B00812D1A /* Path+Extensions.swift */,
-				452299B82B07ED6900812D1A /* Extrusion */,
+				45F6E26B2B0ACB1D000D93DB /* Extrusion.swift */,
 				452299BD2B07EDFB00812D1A /* TrivialMesh */,
 				452299AD2B07E3F200812D1A /* Teapot.ply */,
 				4504788A2B0A9E6F00267CA8 /* Monkey.ply */,
@@ -140,21 +146,15 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		452299B82B07ED6900812D1A /* Extrusion */ = {
-			isa = PBXGroup;
-			children = (
-				452299B02B07E74700812D1A /* Path+Extrusion.swift */,
-			);
-			path = Extrusion;
-			sourceTree = "<group>";
-		};
 		452299BD2B07EDFB00812D1A /* TrivialMesh */ = {
 			isa = PBXGroup;
 			children = (
+				450478902B0AB6D100267CA8 /* PLYEncoder.swift */,
 				452299B12B07E74700812D1A /* TrivialMesh.swift */,
 				4504788C2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift */,
 				452299BB2B07EDC900812D1A /* TrivialMesh+Conversion.swift */,
 				452299B92B07ED8500812D1A /* TrivialMesh+Tesselation.swift */,
+				450478922B0AB6FF00267CA8 /* TrivialMesh+Export.swift */,
 			);
 			path = TrivialMesh;
 			sourceTree = "<group>";
@@ -268,21 +268,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				4522997F2B07DC3C00812D1A /* ContentView.swift in Sources */,
-				452299CB2B0806D600812D1A /* TeapotView.swift in Sources */,
 				452299CF2B0832B900812D1A /* Inspectors.swift in Sources */,
 				4517B4B62B093D78008A0863 /* BoxesView.swift in Sources */,
 				452299A52B07E1C400812D1A /* BallRotationModifier.swift in Sources */,
 				452299A12B07DE1200812D1A /* Projections.swift in Sources */,
 				4522999F2B07DDB200812D1A /* Support.swift in Sources */,
 				4522998F2B07DC8B00812D1A /* SoftwareRendererView.swift in Sources */,
+				450478912B0AB6D100267CA8 /* PLYEncoder.swift in Sources */,
 				4504788D2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift in Sources */,
+				4504788F2B0AB69D00267CA8 /* MeshView.swift in Sources */,
 				452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */,
-				452299B32B07E74700812D1A /* Path+Extrusion.swift in Sources */,
 				452299B42B07E74700812D1A /* TrivialMesh.swift in Sources */,
 				4522997D2B07DC3C00812D1A /* ProjectionDemoApp.swift in Sources */,
+				450478932B0AB6FF00267CA8 /* TrivialMesh+Export.swift in Sources */,
 				452299BC2B07EDC900812D1A /* TrivialMesh+Conversion.swift in Sources */,
 				452299C72B07FBFF00812D1A /* VertexLike.swift in Sources */,
 				452299C92B08063D00812D1A /* ExtrusionView.swift in Sources */,
+				45F6E26C2B0ACB1D000D93DB /* Extrusion.swift in Sources */,
 				452299A32B07DE4100812D1A /* Shapes.swift in Sources */,
 				452299C52B07FBA800812D1A /* Shapes+Mesh.swift in Sources */,
 				452299BA2B07ED8500812D1A /* TrivialMesh+Tesselation.swift in Sources */,
@@ -420,6 +422,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProjectionDemo/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -459,6 +462,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ProjectionDemo/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

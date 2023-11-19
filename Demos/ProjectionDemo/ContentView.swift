@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        
+
         NavigationView {
             List {
                 NavigationLink("(Bare) SoftwareRendererView") {
@@ -12,16 +12,14 @@ struct ContentView: View {
                 NavigationLink("BoxesView") {
                     BoxesView()
                 }
-                NavigationLink("TeapotView") {
-                    TeapotView()
+                NavigationLink("MeshView") {
+                    MeshView()
                 }
                 NavigationLink("ExtrusionView") {
                     ExtrusionView()
                 }
             }
         }
-        
-        
     }
 }
 

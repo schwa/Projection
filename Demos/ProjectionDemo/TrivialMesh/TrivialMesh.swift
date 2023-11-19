@@ -44,11 +44,13 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
 }
 
 extension TrivialMesh {
-    static func merging(meshes: [TrivialMesh]) -> TrivialMesh {
-        meshes.reduce(into: TrivialMesh()) { result, mesh in
+
+    init(merging meshes: [TrivialMesh]) {
+        self = meshes.reduce(into: TrivialMesh()) { result, mesh in
             let offset = result.vertices.count
             result.indices.append(contentsOf: mesh.indices.map { $0 + Index(offset) })
             result.vertices.append(contentsOf: mesh.vertices)
+            // TODO: Does not compact vertices
         }
     }
 
