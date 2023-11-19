@@ -58,6 +58,11 @@ extension TrivialMesh {
         }
         return TrivialMesh(indices: indices, vertices: vertices)
     }
+
+    func flipped() -> Self {
+        let indices = indices.chunks(ofCount: 3).flatMap { $0.reversed() }
+        return TrivialMesh(indices: indices, vertices: vertices)
+    }
 }
 
 extension TrivialMesh where Vertex == SIMD3<Float> {
@@ -65,9 +70,9 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
         TrivialMesh(indices: indices, vertices: vertices.map { $0 + delta })
     }
 
-    var boundingBox: (min: SIMD3<Float>, max: SIMD3<Float>) {
+    var boundingBox: Box<SIMD3<Float>> {
         guard let first = vertices.first else {
-            return (.zero, .zero)
+            return Box(min: .zero, max: .zero)
         }
         let min = vertices.dropFirst().reduce(into: first) { result, vertex in
             result.x = Swift.min(result.x, vertex.x)
@@ -79,6 +84,6 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
             result.y = Swift.max(result.y, vertex.y)
             result.z = Swift.max(result.z, vertex.z)
         }
-        return (min: min, max: max)
+        return Box(min: min, max: max)
     }
 }

@@ -3,6 +3,7 @@ import CoreGraphicsSupport
 import Algorithms
 import Everything
 import earcut
+import CoreText
 
 struct ExtrusionView: View {
     var body: some View {
@@ -55,9 +56,13 @@ extension Polygon where Vertex == CGPoint {
     }
 }
 
-extension TrivialMesh {
-    func flipped() -> Self {
-        let indices = indices.chunks(ofCount: 3).flatMap { $0.reversed() }
-        return TrivialMesh(indices: indices, vertices: vertices)
-    }
-}
+//let font = CTFontCreateWithName("Apple Color Emoji" as CFString, 20, nil)
+//let glyph = CTFontGetGlyphWithName(font, "numbersign" as CFString)
+//let cgPath = CTFontCreatePathForGlyph(font, glyph, nil)!
+//let path = Path(cgPath)
+//            for x in 0..<65535 {
+//                let name = CTFontCopyNameForGlyph(font, UInt16(x))
+//                if let name {
+//                    print(name)
+//                }
+//            }
