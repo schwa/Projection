@@ -3,12 +3,12 @@ import simd
 struct TrivialMesh <Index, Vertex> where Index: UnsignedInteger & BinaryInteger, Vertex: Equatable {
     var indices: [Index]
     var vertices: [Vertex]
-    
+
     init() {
         self.indices = []
         self.vertices = []
     }
-    
+
     init(indices: [Index], vertices: [Vertex]) {
         self.indices = indices
         self.vertices = vertices
@@ -29,7 +29,7 @@ extension TrivialMesh {
 
 extension TrivialMesh where Vertex == SIMD3<Float> {
     init(quads: [Quad<SIMD3<Float>>]) {
-        let triangles = quads.flatMap { let triangles = $0.subdivide(); return [triangles.0.reversed, triangles.1.reversed] }
+        let triangles = quads.flatMap { let triangles = $0.subdivide(); return [triangles.0, triangles.1] }
         self.init(triangles: triangles)
     }
 
@@ -51,7 +51,7 @@ extension TrivialMesh {
             result.vertices.append(contentsOf: mesh.vertices)
         }
     }
-    
+
     func reversed() -> TrivialMesh {
         let indices = indices.chunks(ofCount: 3).flatMap {
             $0.reversed()
@@ -64,7 +64,7 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
     func offset(by delta: SIMD3<Float>) -> TrivialMesh {
         TrivialMesh(indices: indices, vertices: vertices.map { $0 + delta })
     }
-    
+
     var boundingBox: (min: SIMD3<Float>, max: SIMD3<Float>) {
         guard let first = vertices.first else {
             return (.zero, .zero)
@@ -82,4 +82,3 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
         return (min: min, max: max)
     }
 }
-
