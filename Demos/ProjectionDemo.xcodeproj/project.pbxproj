@@ -117,15 +117,10 @@
 				45F6E26A2B0AC501000D93DB /* Info.plist */,
 				4522997C2B07DC3C00812D1A /* ProjectionDemoApp.swift */,
 				4522997E2B07DC3C00812D1A /* ContentView.swift */,
-				4522998E2B07DC8B00812D1A /* SoftwareRendererView.swift */,
-				4504788E2B0AB69D00267CA8 /* MeshView.swift */,
-				452299C82B08063D00812D1A /* ExtrusionView.swift */,
-				4517B4B52B093D78008A0863 /* BoxesView.swift */,
+				45F6E26D2B0ACB9F000D93DB /* DemoViews */,
 				4522999E2B07DDB200812D1A /* Support.swift */,
-				452299CE2B0832B900812D1A /* Inspectors.swift */,
 				452299C12B07F10500812D1A /* Shapes */,
 				452299A02B07DE1200812D1A /* Projections.swift */,
-				452299A42B07E1C400812D1A /* BallRotationModifier.swift */,
 				452299CC2B08103B00812D1A /* Path+Extensions.swift */,
 				45F6E26B2B0ACB1D000D93DB /* Extrusion.swift */,
 				452299BD2B07EDFB00812D1A /* TrivialMesh */,
@@ -175,6 +170,19 @@
 				452299C42B07FBA800812D1A /* Shapes+Mesh.swift */,
 			);
 			path = Shapes;
+			sourceTree = "<group>";
+		};
+		45F6E26D2B0ACB9F000D93DB /* DemoViews */ = {
+			isa = PBXGroup;
+			children = (
+				4522998E2B07DC8B00812D1A /* SoftwareRendererView.swift */,
+				4504788E2B0AB69D00267CA8 /* MeshView.swift */,
+				452299C82B08063D00812D1A /* ExtrusionView.swift */,
+				4517B4B52B093D78008A0863 /* BoxesView.swift */,
+				452299CE2B0832B900812D1A /* Inspectors.swift */,
+				452299A42B07E1C400812D1A /* BallRotationModifier.swift */,
+			);
+			path = DemoViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -118,12 +118,12 @@ struct TransformEditor: View {
 }
 
 struct MapInspector: View {
-    
+
     @Binding
     var camera: Camera
-    
+
     var models: [SIMD3<Float>]
-    
+
     var body: some View {
         Canvas { context, size in
             context.translateBy(x: size.width / 2, y: size.height / 2)
@@ -138,19 +138,19 @@ struct MapInspector: View {
             let cameraPosition = CGPoint(camera.transform.translation.xz) * [5, 5]
             context.fill(Path(ellipseIn: CGRect(center: cameraPosition, radius: 4)), with: .color(.yellow))
 
-            
+
             context.stroke(Path { path in
-                
+
                 path.move(to: cameraPosition)
-                
+
                 let unit = camera.transform.matrix * SIMD4<Float>(0, 1, 0, -1)
-                
-                
+
+
 //                path.addLine(to: cameraPosition + CGPoint(unit.xz) * -2)
                 path.addLine(to: CGPoint(unit.xz) * 2, relative: true)
             }, with: .color(.yellow), lineWidth: 2)
-            
-            
+
+
         }
         .background(.black)
     }
