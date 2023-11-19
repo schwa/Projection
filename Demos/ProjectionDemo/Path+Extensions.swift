@@ -1,10 +1,6 @@
 import SwiftUI
 
 extension Path {
-    init(elements: [Path.Element]) {
-        fatalError()
-    }
-    
     var elements: [Path.Element] {
         var elements: [Path.Element] = []
         forEach { element in
@@ -53,7 +49,6 @@ extension Path {
     }
 }
 
-
 extension Path {
     func render(transform: CGAffineTransform = .identity) -> [LineSegment<CGPoint>] {
         var segments: [LineSegment<CGPoint>] = []
@@ -82,5 +77,4 @@ extension Path {
         }
         return segments
     }
-    
 }

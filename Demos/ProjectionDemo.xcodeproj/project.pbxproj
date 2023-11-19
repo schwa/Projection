@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4504788B2B0A9E6F00267CA8 /* Monkey.ply in Resources */ = {isa = PBXBuildFile; fileRef = 4504788A2B0A9E6F00267CA8 /* Monkey.ply */; };
+		4504788D2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4504788C2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift */; };
 		4517B4B62B093D78008A0863 /* BoxesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4517B4B52B093D78008A0863 /* BoxesView.swift */; };
 		4522997D2B07DC3C00812D1A /* ProjectionDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4522997C2B07DC3C00812D1A /* ProjectionDemoApp.swift */; };
 		4522997F2B07DC3C00812D1A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4522997E2B07DC3C00812D1A /* ContentView.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4504788A2B0A9E6F00267CA8 /* Monkey.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Monkey.ply; sourceTree = "<group>"; };
+		4504788C2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TrivialMesh+ModelIO.swift"; sourceTree = "<group>"; };
 		4517B4B52B093D78008A0863 /* BoxesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxesView.swift; sourceTree = "<group>"; };
 		452299792B07DC3C00812D1A /* ProjectionDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ProjectionDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4522997C2B07DC3C00812D1A /* ProjectionDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectionDemoApp.swift; sourceTree = "<group>"; };
@@ -120,6 +124,7 @@
 				452299B82B07ED6900812D1A /* Extrusion */,
 				452299BD2B07EDFB00812D1A /* TrivialMesh */,
 				452299AD2B07E3F200812D1A /* Teapot.ply */,
+				4504788A2B0A9E6F00267CA8 /* Monkey.ply */,
 				452299802B07DC3D00812D1A /* Assets.xcassets */,
 				452299822B07DC3D00812D1A /* ProjectionDemo.entitlements */,
 				452299832B07DC3D00812D1A /* Preview Content */,
@@ -147,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				452299B12B07E74700812D1A /* TrivialMesh.swift */,
+				4504788C2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift */,
 				452299BB2B07EDC900812D1A /* TrivialMesh+Conversion.swift */,
 				452299B92B07ED8500812D1A /* TrivialMesh+Tesselation.swift */,
 			);
@@ -247,6 +253,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4504788B2B0A9E6F00267CA8 /* Monkey.ply in Resources */,
 				452299AE2B07E3F200812D1A /* Teapot.ply in Resources */,
 				452299852B07DC3D00812D1A /* Preview Assets.xcassets in Resources */,
 				452299812B07DC3D00812D1A /* Assets.xcassets in Resources */,
@@ -268,6 +275,7 @@
 				452299A12B07DE1200812D1A /* Projections.swift in Sources */,
 				4522999F2B07DDB200812D1A /* Support.swift in Sources */,
 				4522998F2B07DC8B00812D1A /* SoftwareRendererView.swift in Sources */,
+				4504788D2B0A9EDF00267CA8 /* TrivialMesh+ModelIO.swift in Sources */,
 				452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */,
 				452299B32B07E74700812D1A /* Path+Extrusion.swift in Sources */,
 				452299B42B07E74700812D1A /* TrivialMesh.swift in Sources */,

@@ -3,29 +3,39 @@ import CoreGraphicsSupport
 
 struct TeapotView: View {
 
+    static let models = ["Teapot", "Monkey"]
+
     @State
-    var teapot: TrivialMesh<UInt32, SIMD3<Float>>
+    var model: String = "Teapot"
+
+    @State
+    var mesh: TrivialMesh<UInt32, SIMD3<Float>>
 
     init() {
-        teapot = loadTeapot()
+        let url = Bundle.main.url(forResource: "Teapot", withExtension: "ply")!
+        mesh = try! TrivialMesh(url: url)
     }
-    
+
     var body: some View {
         SoftwareRendererView { projection, context2D, context3D in
             var rasterizer = context3D.rasterizer
-            //                for model in models {
-            //                    for (index, polygon) in model.toPolygons().enumerated() {
-            //                        rasterizer.submit(polygon: polygon.vertices.map { $0.position }, with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
-            //                    }
-            //                }
-            
-            for (index, polygon) in teapot.toPolygons().enumerated() {
+            for (index, polygon) in mesh.toPolygons().enumerated() {
                 rasterizer.submit(polygon: polygon.map { $0 }, with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
             }
-            
             rasterizer.rasterize()
-
+        }
+        .overlay(alignment: .topLeading) {
+            Picker("Model", selection: $model) {
+                ForEach(Self.models, id: \.self) { model in
+                    Text(verbatim: model).tag(model)
+                }
+            }
+            .fixedSize()
+            .padding()
+        }
+        .onChange(of: model) {
+            let url = Bundle.main.url(forResource: model, withExtension: "ply")!
+            mesh = try! TrivialMesh(url: url)
         }
     }
 }
-

@@ -101,6 +101,7 @@ struct SoftwareRendererView: View {
                     Toggle("Shade Normals", isOn: $rasterizerOptions.shadeFragmentsWithNormals)
                     Toggle("Fill", isOn: $rasterizerOptions.fill)
                     Toggle("Stroke", isOn: $rasterizerOptions.stroke)
+                    Toggle("Backface Culling", isOn: $rasterizerOptions.backfaceCulling)
                 }
                 LabeledContent("Track Ball") {
                     TextField("Pitch Limit", value: $pitchLimit, format: ClosedRangeFormatStyle(substyle: .angle))
@@ -141,49 +142,6 @@ struct BallConstraintEditor: View {
         TextField("Pitch", value: $ballConstraint.rotation.pitch, format: .angle)
         TextField("Yaw", value: $ballConstraint.rotation.yaw, format: .angle)
     }
-}
-
-//            for angle in stride(from: Float.zero, to: 360.0, by: 45.0) {
-//                let angle = Angle<Float>(degrees: angle)
-//                context.stroke(path: Path3D { path in
-//                    path.move(to: [0, 0, 0])
-//                    path.line(to: [0, cos(angle.radians) * 5, sin(angle.radians) * 5])
-//                }, with: .color(.red))
-//                context.stroke(path: Path3D { path in
-//                    path.move(to: [0, 0, 0])
-//                    path.line(to: [cos(angle.radians) * 5, 0, sin(angle.radians) * 5])
-//                }, with: .color(.green))
-//                context.stroke(path: Path3D { path in
-//                    path.move(to: [0, 0, 0])
-//                    path.line(to: [cos(angle.radians) * 5, sin(angle.radians) * 5, 0])
-//                }, with: .color(.blue))
-//            }
-
-func loadTeapot() -> TrivialMesh <UInt32, SIMD3<Float>> {
-    let url = Bundle.main.url(forResource: "Teapot", withExtension: "ply")!
-    let asset = MDLAsset(url: url)
-    let mesh = asset.object(at: 0) as! MDLMesh
-
-    guard let attribute = mesh.vertexDescriptor.attributes.compactMap({ $0 as? MDLVertexAttribute }).first(where: { $0.name == MDLVertexAttributePosition }) else {
-        fatalError()
-    }
-
-    let layout = mesh.vertexDescriptor.layouts[attribute.bufferIndex] as! MDLVertexBufferLayout
-    let positionBuffer = mesh.vertexBuffers[attribute.bufferIndex]
-    let positionBytes = UnsafeRawBufferPointer(start: positionBuffer.map().bytes, count: positionBuffer.length)
-    let positions = positionBytes.chunks(ofCount: layout.stride).map { slice in
-        let start = slice.index(slice.startIndex, offsetBy: attribute.offset)
-        let end = slice.index(start, offsetBy: 12) // TODO: assumes packed float 3
-        let slice = slice[start ..< end]
-        return slice.load(as: PackedFloat3.self) // TODO: assumes packed float 3
-    }
-
-    let submesh = mesh.submeshes![0] as! MDLSubmesh
-    let indexBuffer = submesh.indexBuffer
-    let indexBytes = UnsafeRawBufferPointer(start: indexBuffer.map().bytes, count: indexBuffer.length)
-    let indices = indexBytes.bindMemory(to: UInt32.self)
-
-    return TrivialMesh(indices: Array(indices), vertices: Array(positions.map { SIMD3<Float>($0) }))
 }
 
 extension TrivialMesh {

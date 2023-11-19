@@ -114,6 +114,7 @@ public struct Rasterizer {
         public var shadeFragmentsWithNormals = false
         public var fill = true
         public var stroke = false
+        public var backfaceCulling = true
 
         public static var `default`: Self {
             return .init()
@@ -165,7 +166,7 @@ public struct Rasterizer {
         for fragment in fragments {
             let viewSpaceNormal = (graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz
             let backFacing = simd_dot(viewSpaceNormal, graphicsContext.projection.viewTransform.translation) < 0
-            if backFacing {
+            if options.backfaceCulling && backFacing {
                 continue
             }
             let lines = fragment.clipSpaceVertices.map {
