@@ -25,6 +25,9 @@ struct SoftwareRendererView: View {
     @State
     var rasterizerOptions: Rasterizer.Options = .default
 
+    @State
+    var axisRules: Bool = true
+
     var renderer: (Projection3D, inout GraphicsContext, inout GraphicsContext3D) -> Void
 
     init(renderer: @escaping (Projection3D, inout GraphicsContext, inout GraphicsContext3D) -> Void) {
@@ -41,37 +44,39 @@ struct SoftwareRendererView: View {
             projection.projectionTransform = camera.projection.matrix(viewSize: .init(size))
             projection.clipTransform = simd_float4x4(scale: [Float(size.width) / 2, Float(size.height) / 2, 1])
 
-            context.draw3DLayer(projection: projection) { context, context3D in
-                context3D.stroke(path: Path3D { path in
-                    path.move(to: [-5, 0, 0])
-                    path.addLine(to: [5, 0, 0])
-                }, with: .color(.red))
-                context3D.stroke(path: Path3D { path in
-                    path.move(to: [0, -5, 0])
-                    path.addLine(to: [0, 5, 0])
-                }, with: .color(.green))
-                context3D.stroke(path: Path3D { path in
-                    path.move(to: [0, 0, -5])
-                    path.addLine(to: [0, 0, 5])
-                }, with: .color(.blue))
+            if axisRules {
+                context.draw3DLayer(projection: projection) { context, context3D in
+                    context3D.stroke(path: Path3D { path in
+                        path.move(to: [-5, 0, 0])
+                        path.addLine(to: [5, 0, 0])
+                    }, with: .color(.red))
+                    context3D.stroke(path: Path3D { path in
+                        path.move(to: [0, -5, 0])
+                        path.addLine(to: [0, 5, 0])
+                    }, with: .color(.green))
+                    context3D.stroke(path: Path3D { path in
+                        path.move(to: [0, 0, -5])
+                        path.addLine(to: [0, 0, 5])
+                    }, with: .color(.blue))
 
-                if let symbol = context.resolveSymbol(id: "-X") {
-                    context.draw(symbol, at: projection.project([-5, 0, 0]))
-                }
-                if let symbol = context.resolveSymbol(id: "+X") {
-                    context.draw(symbol, at: projection.project([5, 0, 0]))
-                }
-                if let symbol = context.resolveSymbol(id: "-Y") {
-                    context.draw(symbol, at: projection.project([0, -5, 0]))
-                }
-                if let symbol = context.resolveSymbol(id: "+Y") {
-                    context.draw(symbol, at: projection.project([0, 5, 0]))
-                }
-                if let symbol = context.resolveSymbol(id: "-Z") {
-                    context.draw(symbol, at: projection.project([0, 0, -5]))
-                }
-                if let symbol = context.resolveSymbol(id: "+Z") {
-                    context.draw(symbol, at: projection.project([0, 0, 5]))
+                    if let symbol = context.resolveSymbol(id: "-X") {
+                        context.draw(symbol, at: projection.project([-5, 0, 0]))
+                    }
+                    if let symbol = context.resolveSymbol(id: "+X") {
+                        context.draw(symbol, at: projection.project([5, 0, 0]))
+                    }
+                    if let symbol = context.resolveSymbol(id: "-Y") {
+                        context.draw(symbol, at: projection.project([0, -5, 0]))
+                    }
+                    if let symbol = context.resolveSymbol(id: "+Y") {
+                        context.draw(symbol, at: projection.project([0, 5, 0]))
+                    }
+                    if let symbol = context.resolveSymbol(id: "-Z") {
+                        context.draw(symbol, at: projection.project([0, 0, -5]))
+                    }
+                    if let symbol = context.resolveSymbol(id: "+Z") {
+                        context.draw(symbol, at: projection.project([0, 0, 5]))
+                    }
                 }
             }
             context.draw3DLayer(projection: projection) { context, context3D in
@@ -97,6 +102,7 @@ struct SoftwareRendererView: View {
                     MapInspector(camera: $camera, models: []).aspectRatio(1, contentMode: .fill)
                 }
                 LabeledContent("Rasterizer") {
+                    Toggle("Axis Rules", isOn: $axisRules)
                     Toggle("Draw Normals", isOn: $rasterizerOptions.drawNormals)
                     Toggle("Shade Normals", isOn: $rasterizerOptions.shadeFragmentsWithNormals)
                     Toggle("Fill", isOn: $rasterizerOptions.fill)

@@ -9,7 +9,6 @@ extension PolygonalChain where Point == CGPoint {
             let from = SIMD2<Float>(window.first!)
             let to = SIMD2<Float>(window.last!)
             let quad = Quad(vertices: (
-                // TODO: Invent way to control which axis is extruded
                 SIMD3<Float>(from, min),
                 SIMD3<Float>(from, max),
                 SIMD3<Float>(to, min),
@@ -17,7 +16,7 @@ extension PolygonalChain where Point == CGPoint {
             ))
             result.append(quad)
         }
-        let mesh = TrivialMesh<UInt, SIMD3<Float>>(quads: quads)
+        let mesh = TrivialMesh<UInt, SIMD3<Float>>(quads: quads).reversed() // TODO: Silly. Just reverse the quad
         return mesh
     }
 }

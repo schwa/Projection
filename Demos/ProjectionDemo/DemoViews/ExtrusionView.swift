@@ -5,12 +5,17 @@ import earcut
 import Everything
 import SwiftUI
 import UniformTypeIdentifiers
+import Projection
 
 extension UTType {
     static let plyFile = UTType(importedAs: "public.polygon-file-format")
 }
 
 struct ExtrusionView: View {
+
+    @State
+    var path: Path
+
     @State
     var meshes: [TrivialMesh<UInt, SIMD3<Float>>]
 
@@ -21,11 +26,15 @@ struct ExtrusionView: View {
     var fileExporterIsPresented = false
 
     init() {
-        let path = Path(CGSize(1, 1))
+        //let path = Path(CGSize(1, 1))
+        let path = Path.star(points: 5, innerRadius: 0.5, outerRadius: 1)
         let polygons = path.polygonalChains.filter(\.isClosed).map { Polygon(polygonalChain: $0) }
         let meshes = polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) }
+
+
+        self.path = path
         self.meshes = meshes
-        source = TrivialMesh(merging: meshes).toPLY()
+        self.source = TrivialMesh(merging: meshes).toPLY()
     }
 
     var body: some View {
@@ -38,6 +47,7 @@ struct ExtrusionView: View {
                     }
                     rasterizer.rasterize()
                 }
+                context3D.stroke(path: Path3D(path: path), with: .color(.black), lineWidth: 4)
             }
             .tabItem {
                 Text("Model")
@@ -61,14 +71,43 @@ struct ExtrusionView: View {
     }
 }
 
-extension Path {
-    static func star(sides: N, innerRadius: Double, outerRadius: Double) -> Path {
-        let points = (0 ..< sides).map { i -> CGPoint in
-            let angle = 2 * .pi * Double(i) / Double(sides)
-            let radius = i.isMultiple(of: 2) ? innerRadius : outerRadius
-            return CGPoint(x: radius * cos(angle), y: radius * sin(angle))
+extension Path3D {
+    init(path: Path) {
+        let elements = path.elements
+        self = Path3D { path in
+            for element in elements {
+                switch element {
+                case .move(let point):
+                    path.move(to: SIMD3(xy: SIMD2(point)))
+                case .line(let point):
+                    path.addLine(to: SIMD3(xy: SIMD2(point)))
+                case .closeSubpath:
+                    path.closePath()
+                default:
+                    fatalError("Unimplemented")
+                }
+            }
         }
-        return Path(points)
+    }
+}
+
+extension Path {
+    static func star(points: Int, innerRadius: Double, outerRadius: Double) -> Path {
+        var path = Path()
+        assert(points > 1, "Number of points should be greater than 1 for a star")
+        var angle = -0.5 * .pi // Starting from the top
+        for n in 0..<points * 2 {
+            let radius = n % 2 == 0 ? outerRadius : innerRadius
+            let point = CGPoint(x: radius * cos(angle), y: radius * sin(angle))
+            if path.isEmpty {
+                path.move(to: point)
+            } else {
+                path.addLine(to: point)
+            }
+            angle += .pi / Double(points)
+        }
+        path.closeSubpath()
+        return path
     }
 }
 
@@ -82,3 +121,9 @@ extension Path {
 //                    print(name)
 //                }
 //            }
+
+public extension SIMD3 where Scalar: BinaryFloatingPoint {
+    init(xy: SIMD2<Scalar>) {
+        self = SIMD3(xy[0], xy[1], 0)
+    }
+}
