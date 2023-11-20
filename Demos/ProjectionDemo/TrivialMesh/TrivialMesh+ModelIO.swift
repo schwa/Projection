@@ -1,10 +1,6 @@
 import Algorithms
-import CoreGraphicsSupport
 import ModelIO
-import Projection
 import SIMDSupport
-import SwiftFormats
-import SwiftUI
 
 extension TrivialMesh where Index == UInt32, Vertex == SIMD3<Float> {
     init(url: URL) throws {

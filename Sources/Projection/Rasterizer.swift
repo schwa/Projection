@@ -59,7 +59,9 @@ public struct Rasterizer {
             lhs.clipSpaceMin.z < rhs.clipSpaceMin.z
         }
         for fragment in fragments {
-            let viewSpaceNormal = (graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz
+
+            let viewSpaceNormal = simd_normalize((graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz)
+            print(viewSpaceNormal)
             let backFacing = simd_dot(viewSpaceNormal, .zero) < 0
             if options.backfaceCulling && backFacing {
                 continue
@@ -89,7 +91,7 @@ public struct Rasterizer {
                     path.move(to: center)
                     path.addLine(to: center + fragment.modelSpaceNormal)
                 }
-                graphicsContext.stroke(path: path, with: .color(fragment.modelSpaceNormal))
+                graphicsContext.stroke(path: path, with: backFacing ? .color(.red) : .color(.blue))
             }
         }
     }

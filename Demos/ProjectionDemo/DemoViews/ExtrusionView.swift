@@ -53,12 +53,12 @@ struct ExtrusionView: View {
                 Text("Model")
             }
 
-            Text(verbatim: source)
+            TextEditor(text: .constant(source))
                 .monospaced()
                 .textSelection(.enabled)
-                .tabItem {
-                    Text("PLY")
-                }
+            .tabItem {
+                Text("Source")
+            }
         }
         .toolbar {
             Button("Export") {
