@@ -60,7 +60,7 @@ public struct Rasterizer {
         }
         for fragment in fragments {
             let viewSpaceNormal = (graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz
-            let backFacing = simd_dot(viewSpaceNormal, graphicsContext.projection.viewTransform.translation) < 0
+            let backFacing = simd_dot(viewSpaceNormal, .zero) < 0
             if options.backfaceCulling && backFacing {
                 continue
             }
@@ -74,7 +74,7 @@ public struct Rasterizer {
                 path.closeSubpath()
             }
 
-            let shading = !options.shadeFragmentsWithNormals ? fragment.shading : .color(fragment.modelSpaceNormal)
+            let shading = !options.shadeFragmentsWithNormals ? fragment.shading : .color(viewSpaceNormal)
 
             if options.fill {
                 graphicsContext.graphicsContext2D.fill(path, with: shading)

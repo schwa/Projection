@@ -27,7 +27,7 @@ struct ExtrusionView: View {
 
     init() {
         //let path = Path(CGSize(1, 1))
-        let path = Path.star(points: 5, innerRadius: 0.5, outerRadius: 1)
+        let path = Path.star(points: 4, innerRadius: 0.5, outerRadius: 1)
         let polygons = path.polygonalChains.filter(\.isClosed).map { Polygon(polygonalChain: $0) }
         let meshes = polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) }
 

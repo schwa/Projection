@@ -28,6 +28,9 @@ struct SoftwareRendererView: View {
     @State
     var axisRules: Bool = true
 
+    @State
+    var isInspectorPresented: Bool = true
+
     var renderer: (Projection3D, inout GraphicsContext, inout GraphicsContext3D) -> Void
 
     init(renderer: @escaping (Projection3D, inout GraphicsContext, inout GraphicsContext3D) -> Void) {
@@ -96,12 +99,12 @@ struct SoftwareRendererView: View {
         .onChange(of: ballConstraint.transform) {
             camera.transform.matrix = ballConstraint.transform
         }
-        .inspector(isPresented: .constant(true)) {
+        .inspector(isPresented: $isInspectorPresented) {
             Form {
-                LabeledContent("Map") {
+                Section("Map") {
                     MapInspector(camera: $camera, models: []).aspectRatio(1, contentMode: .fill)
                 }
-                LabeledContent("Rasterizer") {
+                Section("Rasterizer") {
                     Toggle("Axis Rules", isOn: $axisRules)
                     Toggle("Draw Normals", isOn: $rasterizerOptions.drawNormals)
                     Toggle("Shade Normals", isOn: $rasterizerOptions.shadeFragmentsWithNormals)
@@ -109,21 +112,27 @@ struct SoftwareRendererView: View {
                     Toggle("Stroke", isOn: $rasterizerOptions.stroke)
                     Toggle("Backface Culling", isOn: $rasterizerOptions.backfaceCulling)
                 }
-                LabeledContent("Track Ball") {
+                Section("Track Ball") {
                     TextField("Pitch Limit", value: $pitchLimit, format: ClosedRangeFormatStyle(substyle: .angle))
                     TextField("Yaw Limit", value: $pitchLimit, format: ClosedRangeFormatStyle(substyle: .angle))
                 }
-                LabeledContent("Camera") {
+                Section("Camera") {
                     CameraInspector(camera: $camera)
                 }
-                LabeledContent("Model Transform") {
+                Section("Model Transform") {
                     TransformEditor(transform: $modelTransform)
                 }
-                LabeledContent("Ball Constraint") {
+                Section("Ball Constraint") {
                     BallConstraintEditor(ballConstraint: $ballConstraint)
                 }
             }
-            .controlSize(.mini)
+            .inspectorColumnWidth(min: 320, ideal: 320)
+            .frame(maxWidth: .infinity)
+            .controlSize(.small)
+        }
+        .toolbar {
+            Toggle(isOn: $isInspectorPresented, label: { Label("Inspector", systemImage: "sidebar.right")})
+            .toggleStyle(.button)
         }
     }
 }
