@@ -71,6 +71,10 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
         TrivialMesh(indices: indices, vertices: vertices.map { $0 + delta })
     }
 
+    func scale(by scale: SIMD3<Float>) -> TrivialMesh {
+        TrivialMesh(indices: indices, vertices: vertices.map { $0 * scale })
+    }
+
     var boundingBox: Box<SIMD3<Float>> {
         guard let first = vertices.first else {
             return Box(min: .zero, max: .zero)

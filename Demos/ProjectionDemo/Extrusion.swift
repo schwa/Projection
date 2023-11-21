@@ -1,7 +1,6 @@
 import Algorithms
-import CoreGraphicsSupport
+import CoreGraphics
 import earcut
-import UniformTypeIdentifiers
 
 extension PolygonalChain where Point == CGPoint {
     func extrude(min: Float, max: Float) -> TrivialMesh<UInt, SIMD3<Float>> {

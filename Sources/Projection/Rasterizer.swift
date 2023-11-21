@@ -29,7 +29,7 @@ public struct Rasterizer {
             self.clipSpaceVertices = modelSpaceVertices.map {
                 transform * SIMD4<Float>($0, 1.0)
             }
-            self.clipSpaceMin = clipSpaceVertices.reduce(.zero) { result, vertex in
+            self.clipSpaceMin = clipSpaceVertices.reduce([.infinity, .infinity, .infinity]) { result, vertex in
                 return SIMD3<Float>(min(result.x, vertex.x), min(result.y, vertex.y), min(result.z, vertex.z))
             }
             let a = modelSpaceVertices[0]
@@ -56,13 +56,12 @@ public struct Rasterizer {
             $0.clipSpaceMin.z <= 0
         }
         .sorted { lhs, rhs in
-            lhs.clipSpaceMin.z < rhs.clipSpaceMin.z
+            compare(lhs.clipSpaceMin.reverseTuple, rhs.clipSpaceMin.reverseTuple) == .orderedAscending
         }
         for fragment in fragments {
-
-            let viewSpaceNormal = simd_normalize((graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz)
-            print(viewSpaceNormal)
-            let backFacing = simd_dot(viewSpaceNormal, .zero) < 0
+            let viewPosition = graphicsContext.projection.viewTransform.inverse.translation
+            let viewSpaceNormal = (graphicsContext.projection.viewTransform * SIMD4(fragment.modelSpaceNormal, 1.0)).xyz
+            let backFacing = simd_dot(fragment.modelSpaceVertices[0] - viewPosition, fragment.modelSpaceNormal) >= 0
             if options.backfaceCulling && backFacing {
                 continue
             }
@@ -94,5 +93,46 @@ public struct Rasterizer {
                 graphicsContext.stroke(path: path, with: backFacing ? .color(.red) : .color(.blue))
             }
         }
+    }
+}
+
+func compare <C>(_ lhs: C, _ rhs: C) -> ComparisonResult where C: Comparable {
+    if lhs == rhs {
+        return .orderedSame
+    }
+    else if lhs < rhs {
+        return .orderedAscending
+    }
+    else {
+        return .orderedDescending
+    }
+}
+
+func compare <C>(_ lhs: (C, C), _ rhs: (C, C)) -> ComparisonResult where C: Comparable {
+    let r = compare(lhs.0, rhs.0)
+    if r == .orderedSame {
+        return compare(lhs.1, rhs.1)
+    }
+    else {
+        return r
+    }
+}
+
+func compare <C>(_ lhs: (C, C, C), _ rhs: (C, C, C)) -> ComparisonResult where C: Comparable {
+    let r = compare((lhs.0, lhs.1), (rhs.0, rhs.1))
+    if r == .orderedSame {
+        return compare(lhs.2, rhs.2)
+    }
+    else {
+        return r
+    }
+}
+
+extension SIMD3 {
+    var tuple: (Scalar, Scalar, Scalar) {
+        return (x, y, z)
+    }
+    var reverseTuple: (Scalar, Scalar, Scalar) {
+        return (z, y, x)
     }
 }

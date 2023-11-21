@@ -17,7 +17,7 @@ struct ExtrusionView: View {
     var path: Path
 
     @State
-    var meshes: [TrivialMesh<UInt, SIMD3<Float>>]
+    var mesh: TrivialMesh<UInt, SIMD3<Float>>
 
     @State
     var source: String
@@ -26,28 +26,37 @@ struct ExtrusionView: View {
     var fileExporterIsPresented = false
 
     init() {
-        //let path = Path(CGSize(1, 1))
-        let path = Path.star(points: 4, innerRadius: 0.5, outerRadius: 1)
+
+//         let font = CTFontCreateWithName("Apple Color Emoji" as CFString, 20, nil)
+//         let glyph = CTFontGetGlyphWithName(font, "numbersign" as CFString)
+//         let cgPath = CTFontCreatePathForGlyph(font, glyph, nil)!
+//         let path = Path(cgPath)
+//                    for x in 0..<65535 {
+//                        let name = CTFontCopyNameForGlyph(font, UInt16(x))
+//                        if let name {
+//                            print(name)
+//                        }
+//                    }
+
+        let path = Path.star(points: 12, innerRadius: 0.5, outerRadius: 1)
         let polygons = path.polygonalChains.filter(\.isClosed).map { Polygon(polygonalChain: $0) }
-        let meshes = polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) }
-
-
+        var mesh = TrivialMesh(merging: polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) })
+        mesh = mesh.offset(by: -mesh.boundingBox.min)
+//        mesh = mesh.scale(by: [0.25, 0.25, 0.25])
         self.path = path
-        self.meshes = meshes
-        self.source = TrivialMesh(merging: meshes).toPLY()
+        self.mesh = mesh
+        self.source = mesh.toPLY()
     }
 
     var body: some View {
         TabView {
             SoftwareRendererView { _, _, context3D in
-                for mesh in meshes {
-                    var rasterizer = context3D.rasterizer
-                    for (index, polygon) in mesh.toPolygons().enumerated() {
-                        rasterizer.submit(polygon: polygon.map { $0 }, with: .color(Color(rgb: kellyColors[index % kellyColors.count])))
-                    }
-                    rasterizer.rasterize()
+                var rasterizer = context3D.rasterizer
+                for (index, polygon) in mesh.toPolygons().enumerated() {
+                    rasterizer.submit(polygon: polygon.map { $0 }, with: .color(Color(rgb: kellyColors[index % kellyColors.count])))
                 }
-                context3D.stroke(path: Path3D(path: path), with: .color(.black), lineWidth: 4)
+                rasterizer.rasterize()
+//                context3D.stroke(path: Path3D(path: path), with: .color(.black), lineWidth: 1)
             }
             .tabItem {
                 Text("Model")
@@ -110,17 +119,6 @@ extension Path {
         return path
     }
 }
-
-// let font = CTFontCreateWithName("Apple Color Emoji" as CFString, 20, nil)
-// let glyph = CTFontGetGlyphWithName(font, "numbersign" as CFString)
-// let cgPath = CTFontCreatePathForGlyph(font, glyph, nil)!
-// let path = Path(cgPath)
-//            for x in 0..<65535 {
-//                let name = CTFontCopyNameForGlyph(font, UInt16(x))
-//                if let name {
-//                    print(name)
-//                }
-//            }
 
 public extension SIMD3 where Scalar: BinaryFloatingPoint {
     init(xy: SIMD2<Scalar>) {
