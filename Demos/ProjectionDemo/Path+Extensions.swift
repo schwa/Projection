@@ -1,4 +1,5 @@
 import SwiftUI
+import GeometryX
 
 extension Path {
     var elements: [Path.Element] {

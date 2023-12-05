@@ -3,6 +3,7 @@ import CoreGraphicsSupport
 import simd
 import SIMDSupport
 import SwiftUI
+import GeometryX
 
 public struct Camera {
     public var transform: Transform

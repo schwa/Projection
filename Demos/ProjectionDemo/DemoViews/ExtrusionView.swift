@@ -7,6 +7,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 import Projection
 import ModelIO
+import GeometryX
 
 extension UTType {
     static let plyFile = UTType(importedAs: "public.polygon-file-format")

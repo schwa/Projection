@@ -2,7 +2,7 @@ import Algorithms
 import CoreGraphics
 import earcut
 
-extension PolygonalChain where Point == CGPoint {
+public extension PolygonalChain where Point == CGPoint {
     func extrude(min: Float, max: Float) -> TrivialMesh<UInt, SIMD3<Float>> {
         let quads: [Quad<SIMD3<Float>>] = vertices.windows(ofCount: 2).reduce(into: []) { result, window in
             let from = SIMD2<Float>(window.first!)
@@ -20,7 +20,7 @@ extension PolygonalChain where Point == CGPoint {
     }
 }
 
-extension Polygon where Vertex == CGPoint {
+public extension Polygon where Vertex == CGPoint {
     func extrude(min: Float, max: Float, topCap: Bool, bottomCap: Bool) -> TrivialMesh<UInt, SIMD3<Float>> {
         let walls = PolygonalChain(polygon: self).extrude(min: min, max: max)
         let topCap = topCap ? triangulate(z: max) : nil

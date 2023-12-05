@@ -2,7 +2,7 @@ import ModelIO
 import RealityKit
 import SIMDSupport
 
-extension ModelComponent {
+public extension ModelComponent {
     init(mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SIMD3<Float>>) throws {
         var meshDescriptor = MeshDescriptor()
         meshDescriptor.positions = MeshBuffers.Positions(mesh.vertices)

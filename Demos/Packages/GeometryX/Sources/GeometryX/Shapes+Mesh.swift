@@ -1,15 +1,15 @@
 import SIMDSupport
 
-protocol PolygonConvertable {
+public protocol PolygonConvertable {
     func toPolygons() -> [Polygon<SimpleVertex>]
 }
 
-protocol MeshConvertable {
+public protocol MeshConvertable {
     func toMesh() -> TrivialMesh<UInt, SIMD3<Float>>
 }
 
 extension Box: PolygonConvertable where Point == SIMD3<Float> {
-    func toPolygons() -> [Polygon<SimpleVertex>] {
+    public func toPolygons() -> [Polygon<SimpleVertex>] {
         let polygons = [
             Polygon(vertices: [
                 SimpleVertex(position: SIMD3<Float>(min.x, min.y, min.z), normal: .init(x: -1, y: 0, z: 0)),

@@ -2,7 +2,7 @@ import Algorithms
 import ModelIO
 import SIMDSupport
 
-extension TrivialMesh where Index == UInt32, Vertex == SIMD3<Float> {
+public extension TrivialMesh where Index == UInt32, Vertex == SIMD3<Float> {
     init(url: URL) throws {
         let asset = MDLAsset(url: url)
         let mesh = asset.object(at: 0) as! MDLMesh
@@ -30,7 +30,7 @@ extension TrivialMesh where Index == UInt32, Vertex == SIMD3<Float> {
     }
 }
 
-extension MDLMesh {
+public extension MDLMesh {
     convenience init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>) {
         let vertexBuffer = mesh.vertices.withUnsafeBytes { buffer in
             MDLMeshBufferData(type: .vertex, data: Data(buffer))

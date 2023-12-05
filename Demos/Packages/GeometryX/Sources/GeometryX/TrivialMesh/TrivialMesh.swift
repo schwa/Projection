@@ -1,21 +1,21 @@
 import simd
 
-struct TrivialMesh<Index, Vertex> where Index: UnsignedInteger & BinaryInteger, Vertex: Equatable {
-    var indices: [Index]
-    var vertices: [Vertex]
+public struct TrivialMesh<Index, Vertex> where Index: UnsignedInteger & BinaryInteger, Vertex: Equatable {
+    public var indices: [Index]
+    public var vertices: [Vertex]
 
-    init() {
+    public init() {
         indices = []
         vertices = []
     }
 
-    init(indices: [Index], vertices: [Vertex]) {
+    public init(indices: [Index], vertices: [Vertex]) {
         self.indices = indices
         self.vertices = vertices
     }
 }
 
-extension TrivialMesh {
+public extension TrivialMesh {
     mutating func append(vertex: Vertex) {
         if let index = vertices.firstIndex(of: vertex) {
             indices.append(Index(index))
@@ -27,7 +27,7 @@ extension TrivialMesh {
     }
 }
 
-extension TrivialMesh where Vertex == SIMD3<Float> {
+public extension TrivialMesh where Vertex == SIMD3<Float> {
     init(quads: [Quad<SIMD3<Float>>]) {
         let triangles = quads.flatMap { let triangles = $0.subdivide(); return [triangles.0, triangles.1] }
         self.init(triangles: triangles)
@@ -43,7 +43,7 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
     }
 }
 
-extension TrivialMesh {
+public extension TrivialMesh {
     init(merging meshes: [TrivialMesh]) {
         self = meshes.reduce(into: TrivialMesh()) { result, mesh in
             let offset = result.vertices.count
@@ -66,7 +66,7 @@ extension TrivialMesh {
     }
 }
 
-extension TrivialMesh where Vertex == SIMD3<Float> {
+public extension TrivialMesh where Vertex == SIMD3<Float> {
     func offset(by delta: SIMD3<Float>) -> TrivialMesh {
         TrivialMesh(indices: indices, vertices: vertices.map { $0 + delta })
     }

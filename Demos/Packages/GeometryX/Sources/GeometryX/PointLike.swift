@@ -28,6 +28,7 @@ public protocol PointLike: Equatable {
 
     var length: Scalar { get }
     var lengthSquared: Scalar { get }
+    var normalized: Self { get }
 }
 
 public protocol PointLike3: PointLike {
@@ -36,6 +37,17 @@ public protocol PointLike3: PointLike {
 }
 
 extension CGPoint: PointLike {
+    public var length: CGFloat {
+        sqrt(lengthSquared)
+    }
+
+    public var lengthSquared: CGFloat {
+        x * x + y * y
+    }
+
+    public var normalized: CGPoint {
+        self / length
+    }
 }
 
 extension SIMD3<Float>: PointLike, PointLike3 {

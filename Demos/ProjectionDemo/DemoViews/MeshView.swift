@@ -1,6 +1,7 @@
 import CoreGraphicsSupport
 import Projection
 import SwiftUI
+import GeometryX
 
 struct MeshView: View {
     static let models = ["Teapot", "Monkey"]

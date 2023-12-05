@@ -1,6 +1,6 @@
 import Foundation
 
-extension TrivialMesh where Vertex == SIMD3<Float> {
+public extension TrivialMesh where Vertex == SIMD3<Float> {
     func toPLY() -> String {
         // let vertices = polygons.flatMap { $0.vertices }
         let faces: [[Int]] = indices.chunks(ofCount: 3).map { $0.map { Int($0) }}
@@ -31,7 +31,7 @@ extension TrivialMesh where Vertex == SIMD3<Float> {
     }
 }
 
-extension TrivialMesh where Vertex == SimpleVertex {
+public extension TrivialMesh where Vertex == SimpleVertex {
     func toPLY() -> String {
         // let vertices = polygons.flatMap { $0.vertices }
         let faces: [[Int]] = indices.chunks(ofCount: 3).map { $0.map { Int($0) } }

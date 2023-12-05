@@ -5,6 +5,7 @@ import ModelIO
 import Algorithms
 import CoreGraphicsSupport
 import SwiftFormats
+import GeometryX
 
 struct SoftwareRendererView: View {
     @State
