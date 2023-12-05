@@ -66,18 +66,19 @@ extension LineSegment {
 
 // MARK: -
 
-struct Plane {
-    var normal: SIMD3<Float>
-    var w: Float
+// TODO: Make generic so we can have floats & points
+struct Plane <Scalar> where Scalar: SIMDScalar & FloatingPoint {
+    var normal: SIMD3<Scalar>
+    var w: Scalar
 
-    init(normal: SIMD3<Float>, w: Float) {
+    init(normal: SIMD3<Scalar>, w: Scalar) {
         self.normal = normal
         self.w = w
     }
 }
 
-extension Plane {
-    init(points: (SIMD3<Float>, SIMD3<Float>, SIMD3<Float>)) {
+extension Plane where Scalar == Float {
+    init(points: (SIMD3<Scalar>, SIMD3<Scalar>, SIMD3<Scalar>)) {
         let (a, b, c) = points
         let n = simd.cross(b - a, c - a).normalized
         self.init(normal: n, w: simd.dot(n, a))
@@ -124,13 +125,13 @@ extension Polygon where Vertex: VertexLike3 {
 }
 
 extension Polygon where Vertex: VertexLike3, Vertex.Vector == SIMD3<Float> {
-    var plane: Plane {
+    var plane: Plane <Float> {
         Plane(points: (vertices[0].position, vertices[1].position, vertices[2].position))
     }
 }
 
 extension Polygon where Vertex == SIMD3<Float> {
-    var plane: Plane {
+    var plane: Plane <Float> {
         Plane(points: (vertices[0], vertices[1], vertices[2]))
     }
 }

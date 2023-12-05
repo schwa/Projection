@@ -74,8 +74,8 @@ struct ExtrusionView: View {
             Button("Export") {
                 fileExporterIsPresented = true
 
-                let asset = MDLAsset()
-                let mesh = MDLMesh(trivialMesh: mesh)
+//                let asset = MDLAsset()
+//                let mesh = MDLMesh(trivialMesh: mesh)
             }
         }
         .fileExporter(isPresented: $fileExporterIsPresented, item: source, contentTypes: [.plyFile], onCompletion: { result in

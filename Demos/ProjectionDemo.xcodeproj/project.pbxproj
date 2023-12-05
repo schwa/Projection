@@ -40,6 +40,7 @@
 		452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CC2B08103B00812D1A /* Path+Extensions.swift */; };
 		452299CF2B0832B900812D1A /* Inspectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CE2B0832B900812D1A /* Inspectors.swift */; };
 		452299D22B0832E100812D1A /* SwiftFormats in Frameworks */ = {isa = PBXBuildFile; productRef = 452299D12B0832E100812D1A /* SwiftFormats */; };
+		4564DED42B1F99B100A76C03 /* Revolve.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4564DED32B1F99B100A76C03 /* Revolve.swift */; };
 		45F6E26C2B0ACB1D000D93DB /* Extrusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F6E26B2B0ACB1D000D93DB /* Extrusion.swift */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		452299C82B08063D00812D1A /* ExtrusionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrusionView.swift; sourceTree = "<group>"; };
 		452299CC2B08103B00812D1A /* Path+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Path+Extensions.swift"; sourceTree = "<group>"; };
 		452299CE2B0832B900812D1A /* Inspectors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspectors.swift; sourceTree = "<group>"; };
+		4564DED32B1F99B100A76C03 /* Revolve.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Revolve.swift; sourceTree = "<group>"; };
 		45F6E26A2B0AC501000D93DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		45F6E26B2B0ACB1D000D93DB /* Extrusion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extrusion.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 				452299A02B07DE1200812D1A /* Projections.swift */,
 				452299CC2B08103B00812D1A /* Path+Extensions.swift */,
 				45F6E26B2B0ACB1D000D93DB /* Extrusion.swift */,
+				4564DED32B1F99B100A76C03 /* Revolve.swift */,
 				452299BD2B07EDFB00812D1A /* TrivialMesh */,
 				452299AD2B07E3F200812D1A /* Teapot.ply */,
 				4504788A2B0A9E6F00267CA8 /* Monkey.ply */,
@@ -292,6 +295,7 @@
 				452299BC2B07EDC900812D1A /* TrivialMesh+Conversion.swift in Sources */,
 				452299C72B07FBFF00812D1A /* VertexLike.swift in Sources */,
 				452299C92B08063D00812D1A /* ExtrusionView.swift in Sources */,
+				4564DED42B1F99B100A76C03 /* Revolve.swift in Sources */,
 				45F6E26C2B0ACB1D000D93DB /* Extrusion.swift in Sources */,
 				452299A32B07DE4100812D1A /* Shapes.swift in Sources */,
 				452299C52B07FBA800812D1A /* Shapes+Mesh.swift in Sources */,
