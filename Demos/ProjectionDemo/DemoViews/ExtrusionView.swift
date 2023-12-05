@@ -6,6 +6,7 @@ import Everything
 import SwiftUI
 import UniformTypeIdentifiers
 import Projection
+import ModelIO
 
 extension UTType {
     static let plyFile = UTType(importedAs: "public.polygon-file-format")
@@ -72,6 +73,9 @@ struct ExtrusionView: View {
         .toolbar {
             Button("Export") {
                 fileExporterIsPresented = true
+
+                let asset = MDLAsset()
+                let mesh = MDLMesh(trivialMesh: mesh)
             }
         }
         .fileExporter(isPresented: $fileExporterIsPresented, item: source, contentTypes: [.plyFile], onCompletion: { result in

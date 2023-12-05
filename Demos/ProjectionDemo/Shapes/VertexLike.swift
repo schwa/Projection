@@ -1,4 +1,5 @@
 import simd
+import SIMDSupport
 
 protocol VertexLike: Equatable {
     associatedtype Vector: PointLike
@@ -11,11 +12,31 @@ protocol VertexLike3: VertexLike where Vector: PointLike3 {
 }
 
 struct SimpleVertex: VertexLike3 {
-    var position: SIMD3<Float>
-    var normal: SIMD3<Float>
+    var _position: PackedFloat3
+    var _normal: PackedFloat3
+    var textureCoordinate: SIMD2<Float>
 
-    init(position: SIMD3<Float>, normal: SIMD3<Float>) {
-        self.position = position
-        self.normal = normal
+    var position: SIMD3<Float> {
+        get {
+            return SIMD3<Float>(_position)
+        }
+        set {
+            _position = PackedFloat3(newValue)
+        }
+    }
+
+    var normal: SIMD3<Float> {
+        get {
+            return SIMD3<Float>(_normal)
+        }
+        set {
+            _normal = PackedFloat3(newValue)
+        }
+    }
+
+    init(position: SIMD3<Float>, normal: SIMD3<Float>, textureCoordinate: SIMD2<Float> = .zero) {
+        self._position = PackedFloat3(position)
+        self._normal = PackedFloat3(normal)
+        self.textureCoordinate = textureCoordinate
     }
 }
