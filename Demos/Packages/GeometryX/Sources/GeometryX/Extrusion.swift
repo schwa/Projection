@@ -32,15 +32,23 @@ public extension PolygonalChain where Point == CGPoint {
             let transform = axis.transform
             let normal = SIMD3<Float>(0, 0, 1) * transform
             let quad = Quad(vertices: (
-                SimpleVertex(position: SIMD3<Float>(from.x, from.y, min) * transform, normal: normal, textureCoordinate: [0, 0]),
-                SimpleVertex(position: SIMD3<Float>(from.x, from.y, max) * transform, normal: normal, textureCoordinate: [0, 1]),
-                SimpleVertex(position: SIMD3<Float>(to.x, to.y, min) * transform, normal: normal, textureCoordinate: [1, 0]),
-                SimpleVertex(position: SIMD3<Float>(to.x, to.y, max) * transform, normal: normal, textureCoordinate: [1, 1])
+                SimpleVertex(position: SIMD3<Float>(from.x, from.y, min) * transform, normal: normal),
+                SimpleVertex(position: SIMD3<Float>(to.x, to.y, min) * transform, normal: normal),
+                SimpleVertex(position: SIMD3<Float>(from.x, from.y, max) * transform, normal: normal),
+                SimpleVertex(position: SIMD3<Float>(to.x, to.y, max) * transform, normal: normal)
             ))
             result.append(quad)
         }
-        let mesh = TrivialMesh<UInt, SimpleVertex>(quads: quads).reversed() // TODO: Silly. Just reverse the quad
+        let mesh = TrivialMesh<UInt, SimpleVertex>(quads: quads)
         return mesh
+    }
+}
+
+extension Quad {
+    func flipped() -> Self {
+        return Quad(vertices: (
+            vertices.0, vertices.2, vertices.1, vertices.3
+        ))
     }
 }
 
