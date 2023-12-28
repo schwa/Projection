@@ -1,13 +1,30 @@
 import ModelIO
 import RealityKit
-import SIMDSupport
+
+public extension MeshDescriptor {
+    init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>) {
+        self = MeshDescriptor()
+        // TODO: We're ignoring normals and texture coordinates for now.
+        assert(mesh.isValid)
+        assert(!mesh.indices.isEmpty)
+        assert(mesh.indices.count < UInt32.max)
+        positions = MeshBuffers.Positions(mesh.vertices.map(\.position))
+        primitives = .triangles(mesh.indices.map { UInt32($0) })
+    }
+}
 
 public extension ModelComponent {
-    init(mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SIMD3<Float>>) throws {
-        var meshDescriptor = MeshDescriptor()
-        meshDescriptor.positions = MeshBuffers.Positions(mesh.vertices)
-        meshDescriptor.primitives = .triangles(mesh.indices.map { UInt32($0) })
+    init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>, materials: [Material] = []) throws {
+        let meshDescriptor = MeshDescriptor(trivialMesh: mesh)
         let meshResource = try MeshResource.generate(from: [meshDescriptor])
-        self = ModelComponent(mesh: meshResource, materials: [])
+        self = ModelComponent(mesh: meshResource, materials: materials)
+    }
+}
+
+public extension ModelEntity {
+    convenience init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>, materials: [Material] = []) throws {
+        let modelComponent = try! ModelComponent(trivialMesh: mesh, materials: materials)
+        self.init()
+        self.components.set(modelComponent)
     }
 }
