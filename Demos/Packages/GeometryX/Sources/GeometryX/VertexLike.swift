@@ -40,6 +40,12 @@ public struct SimpleVertex: VertexLike3 {
         self.packedNormal = PackedFloat3(normal)
         self.textureCoordinate = textureCoordinate
     }
+
+    public init(position: PackedFloat3, normal: PackedFloat3, textureCoordinate: SIMD2<Float> = .zero) {
+        self.packedPosition = position
+        self.packedNormal = normal
+        self.textureCoordinate = textureCoordinate
+    }
 }
 
 extension SIMD3 <Float>: VertexLike {

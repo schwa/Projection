@@ -4,13 +4,22 @@ import SwiftUI
 import GeometryX
 
 struct MeshView: View {
-    static let models = ["Teapot", "Monkey"]
+    static let models = ["Teapot", "Monkey", "Cube", "Square", "Icosphere"]
 
     @State
     var model: String = "Teapot"
 
     @State
-    var mesh: TrivialMesh<UInt32, SIMD3<Float>>
+    var mesh: TrivialMesh<UInt32, SimpleVertex>
+
+    enum Mode {
+        case model
+        case vertices
+    }
+
+    @State
+    var mode: Mode = .model
+
 
     init() {
         let url = Bundle.main.url(forResource: "Teapot", withExtension: "ply")!
@@ -18,27 +27,55 @@ struct MeshView: View {
     }
 
     var body: some View {
-        SoftwareRendererView { _, _, context3D in
-            var rasterizer = context3D.rasterizer
-            for (index, polygon) in mesh.toPolygons().enumerated() {
-                rasterizer.submit(polygon: polygon.map { $0 }, with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
+        ZStack {
+            switch mode {
+            case .model:
+                SoftwareRendererView { _, _, context3D in
+                    var rasterizer = context3D.rasterizer
+                    for (index, polygon) in mesh.toPolygons().enumerated() {
+                        rasterizer.submit(polygon: polygon.map { $0.position }, with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
+                    }
+                    rasterizer.rasterize()
+                    context3D.stroke(path: Path3D(box: mesh.boundingBox), with: .color(.purple))
+                    for vertex in mesh.vertices {
+                        let path = Path3D { path in
+                            path.move(to: vertex.position)
+                            path.addLine(to: vertex.position + vertex.normal * 0.25)
+                        }
+                        context3D.stroke(path: path, with: .color(.blue))
+                    }
+                }
+            case .vertices:
+                Table(mesh.vertices.indices.map { Identified(id: $0, value: mesh.vertices[Int($0)])}) {
+                    TableColumn("Position X") { Text(verbatim: "\($0.value.position.x)") }
+                    TableColumn("Position Y") { Text(verbatim: "\($0.value.position.y)") }
+                    TableColumn("Position Z") { Text(verbatim: "\($0.value.position.z)") }
+                    TableColumn("Normal X") { Text(verbatim: "\($0.value.normal.x)") }
+                    TableColumn("Normal Y") { Text(verbatim: "\($0.value.normal.y)") }
+                    TableColumn("Normal Z") { Text(verbatim: "\($0.value.normal.z)") }
+                    TableColumn("Texture X") { Text(verbatim: "\($0.value.textureCoordinate.x)") }
+                    TableColumn("Texture Y") { Text(verbatim: "\($0.value.textureCoordinate.y)") }
+                }
             }
-            rasterizer.rasterize()
-
-            context3D.stroke(path: Path3D(box: mesh.boundingBox), with: .color(.purple))
         }
-        .overlay(alignment: .topLeading) {
+        .toolbar {
             Picker("Model", selection: $model) {
                 ForEach(Self.models, id: \.self) { model in
                     Text(verbatim: model).tag(model)
                 }
             }
             .fixedSize()
-            .padding()
+
+            Picker("Mode", selection: $mode) {
+                Text(verbatim: "Render").tag(Mode.model)
+                Text(verbatim: "Vertices").tag(Mode.vertices)
+            }
+            .pickerStyle(.segmented)
+            .fixedSize()
         }
         .onChange(of: model) {
             let url = Bundle.main.url(forResource: model, withExtension: "ply")!
-            mesh = try! TrivialMesh(url: url)
+            mesh = try! TrivialMesh(url: url).renormalize()
         }
     }
 }
@@ -82,4 +119,9 @@ extension Path3D {
             path.addLine(to: box.minXMaxYMaxZ)
         }
     }
+}
+
+struct Identified <ID, Value>: Identifiable where ID: Hashable {
+    var id: ID
+    var value: Value
 }

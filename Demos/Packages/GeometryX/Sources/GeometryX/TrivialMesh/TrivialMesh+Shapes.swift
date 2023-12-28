@@ -44,7 +44,7 @@ public extension TrivialMesh where Index == UInt32, Vertex == SimpleVertex {
             SIMD2<Float>(cos(segmentAngle * Float($0)), sin(segmentAngle * Float($0))) * radius
         }
         let vertices = vertices2D.map {
-            return SimpleVertex(position: [$0.x, $0.y, 0], normal: [0, 0, 1], textureCoordinate: $0)
+            return SimpleVertex(position: SIMD3<Float>($0.x, $0.y, 0), normal: [0, 0, 1], textureCoordinate: $0)
         }
         let indices: [UInt32] = (0..<UInt32(segments)).flatMap {
             let p1 = 1 + $0

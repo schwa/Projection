@@ -30,8 +30,8 @@ public extension TrivialMesh {
         }
     }
 
-    mutating func append(vertex: Vertex) {
-        if let index = vertices.firstIndex(of: vertex) {
+    mutating func append(vertex: Vertex, optimizing: Bool = true) {
+        if optimizing, let index = vertices.firstIndex(of: vertex) {
             indices.append(Index(index))
         }
         else {
@@ -55,17 +55,17 @@ public extension TrivialMesh {
 // MARK: -
 
 public extension TrivialMesh where Vertex: VertexLike {
-    init(quads: [Quad<Vertex>]) {
+    init(quads: [Quad<Vertex>], optimizing: Bool = true) {
         let triangles = quads.flatMap { let triangles = $0.subdivide(); return [triangles.0, triangles.1] }
-        self.init(triangles: triangles)
+        self.init(triangles: triangles, optimizing: optimizing)
     }
 
-    init(triangles: [Triangle<Vertex>]) {
+    init(triangles: [Triangle<Vertex>], optimizing: Bool = true) {
         self.init()
         for triangle in triangles {
-            append(vertex: triangle.vertices.0)
-            append(vertex: triangle.vertices.1)
-            append(vertex: triangle.vertices.2)
+            append(vertex: triangle.vertices.0, optimizing: optimizing)
+            append(vertex: triangle.vertices.1, optimizing: optimizing)
+            append(vertex: triangle.vertices.2, optimizing: optimizing)
         }
     }
 }
@@ -176,5 +176,32 @@ public extension TrivialMesh where Vertex == SimpleVertex {
         }
 
         return true
+    }
+
+
+    var triangles: [Triangle<SimpleVertex>] {
+        indices.chunks(ofCount: 3).map { indices in
+            let indices = indices.map { Int($0) }
+            let p0 = vertices[indices[0]]
+            let p1 = vertices[indices[1]]
+            let p2 = vertices[indices[2]]
+            return Triangle(vertices: (p0, p1, p2))
+        }
+    }
+
+    func renormalize() -> Self {
+        // Regenerate mesh from mesh's triangles to make sure no vertices are re-used.
+        let mesh = TrivialMesh(triangles: triangles, optimizing: false)
+        let vertices = mesh.indices.chunks(ofCount: 3).reduce(into: mesh.vertices) { vertices, indices in
+            let indices = indices.map { Int($0) }
+            let p0 = vertices[indices[0]].position
+            let p1 = vertices[indices[1]].position
+            let p2 = vertices[indices[2]].position
+            let normal = simd.cross(p1 - p0, p2 - p0).normalized
+            vertices[indices[0]].normal = normal
+            vertices[indices[1]].normal = normal
+            vertices[indices[2]].normal = normal
+        }
+        return .init(indices: mesh.indices, vertices: vertices)
     }
 }

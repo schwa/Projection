@@ -107,7 +107,7 @@ struct SoftwareRendererView: View {
                 }
                 Section("Rasterizer") {
                     Toggle("Axis Rules", isOn: $axisRules)
-                    Toggle("Draw Normals", isOn: $rasterizerOptions.drawNormals)
+                    Toggle("Draw Polygon Normals", isOn: $rasterizerOptions.drawNormals)
                     TextField("Normals Length", value: $rasterizerOptions.normalsLength, format: .number)
                     Toggle("Shade Normals", isOn: $rasterizerOptions.shadeFragmentsWithNormals)
                     Toggle("Fill", isOn: $rasterizerOptions.fill)

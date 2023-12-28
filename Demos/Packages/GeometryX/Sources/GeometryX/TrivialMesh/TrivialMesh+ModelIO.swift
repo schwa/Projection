@@ -2,31 +2,102 @@ import Algorithms
 import ModelIO
 import SIMDSupport
 
+enum TrivialMeshError: Error {
+    case generic(String)
+}
+
 public extension TrivialMesh where Index == UInt32, Vertex == SIMD3<Float> {
     init(url: URL) throws {
         let asset = MDLAsset(url: url)
         let mesh = asset.object(at: 0) as! MDLMesh
-
-        guard let attribute = mesh.vertexDescriptor.attributes.compactMap({ $0 as? MDLVertexAttribute }).first(where: { $0.name == MDLVertexAttributePosition }) else {
-            fatalError()
-        }
-
-        let layout = mesh.vertexDescriptor.layouts[attribute.bufferIndex] as! MDLVertexBufferLayout
-        let positionBuffer = mesh.vertexBuffers[attribute.bufferIndex]
-        let positionBytes = UnsafeRawBufferPointer(start: positionBuffer.map().bytes, count: positionBuffer.length)
-        let positions = positionBytes.chunks(ofCount: layout.stride).map { slice in
-            let start = slice.index(slice.startIndex, offsetBy: attribute.offset)
-            let end = slice.index(start, offsetBy: 12) // TODO: assumes packed float 3
-            let slice = slice[start ..< end]
-            return slice.load(as: PackedFloat3.self) // TODO: assumes packed float 3
-        }
-
+        let positions = try mesh.positions
+        // TODO: confirm that these are triangles.
         let submesh = mesh.submeshes![0] as! MDLSubmesh
         let indexBuffer = submesh.indexBuffer
         let indexBytes = UnsafeRawBufferPointer(start: indexBuffer.map().bytes, count: indexBuffer.length)
         let indices = indexBytes.bindMemory(to: UInt32.self)
 
         self.init(indices: Array(indices), vertices: Array(positions.map { SIMD3<Float>($0) }))
+    }
+}
+
+public extension TrivialMesh where Index == UInt32, Vertex == SimpleVertex {
+    init(url: URL) throws {
+        let asset = MDLAsset(url: url)
+        let mesh = asset.object(at: 0) as! MDLMesh
+        let positions = try mesh.positions
+        let normals: [PackedFloat3]
+        if mesh.hasNormals {
+            normals = try mesh.normals
+        }
+        else {
+            normals = Array(repeating: [0, 0, 0], count: positions.count)
+        }
+        let vertices = zip(positions, normals).map {
+            SimpleVertex(position: $0.0, normal: $0.1)
+        }
+
+        // TODO: confirm that these are triangles.
+        let submesh = mesh.submeshes![0] as! MDLSubmesh
+        let indexBuffer = submesh.indexBuffer
+        let indexBytes = UnsafeRawBufferPointer(start: indexBuffer.map().bytes, count: indexBuffer.length)
+        let indices = indexBytes.bindMemory(to: UInt32.self)
+
+        self.init(indices: Array(indices), vertices: vertices)
+    }
+}
+
+extension MDLMesh {
+    var positions: [PackedFloat3] {
+        get throws {
+            guard let attribute = vertexDescriptor.attributes.compactMap({ $0 as? MDLVertexAttribute }).first(where: { $0.name == MDLVertexAttributePosition }) else {
+                throw TrivialMeshError.generic("MDLMesh does not specify positions attribute.")
+            }
+            guard attribute.format == .float3 else {
+                throw TrivialMeshError.generic("Expected attribute to be .float3")
+            }
+            let bufferLayout = vertexDescriptor.layouts[attribute.bufferIndex] as! MDLVertexBufferLayout
+            let buffer = vertexBuffers[attribute.bufferIndex]
+            let bytes = UnsafeRawBufferPointer(start: buffer.map().bytes, count: buffer.length)
+            return bytes.chunks(stride: bufferLayout.stride, offset: attribute.offset, size: MemoryLayout<PackedFloat3>.stride).map {
+                $0.load(as: PackedFloat3.self)
+            }
+        }
+    }
+
+    var hasNormals: Bool {
+        guard let attribute = vertexDescriptor.attributes.compactMap({ $0 as? MDLVertexAttribute }).first(where: { $0.name == MDLVertexAttributeNormal }) else {
+            return false
+        }
+        return true
+    }
+
+    var normals: [PackedFloat3] {
+        get throws {
+            guard let attribute = vertexDescriptor.attributes.compactMap({ $0 as? MDLVertexAttribute }).first(where: { $0.name == MDLVertexAttributeNormal }) else {
+                throw TrivialMeshError.generic("MDLMesh does not specify normals attribute.")
+            }
+            guard attribute.format == .float3 else {
+                throw TrivialMeshError.generic("Expected attribute to be .float3")
+            }
+            let bufferLayout = vertexDescriptor.layouts[attribute.bufferIndex] as! MDLVertexBufferLayout
+            let buffer = vertexBuffers[attribute.bufferIndex]
+            let bytes = UnsafeRawBufferPointer(start: buffer.map().bytes, count: buffer.length)
+            return bytes.chunks(stride: bufferLayout.stride, offset: attribute.offset, size: MemoryLayout<PackedFloat3>.stride).map {
+                $0.load(as: PackedFloat3.self)
+            }
+        }
+    }
+}
+
+extension DataProtocol {
+    func chunks(stride: Int, offset: Int, size: Int) -> AnySequence<SubSequence> {
+        let r = chunks(ofCount: stride).lazy.map { slice in
+            let start = slice.index(slice.startIndex, offsetBy: offset)
+            let end = slice.index(start, offsetBy: size)
+            return slice[start ..< end]
+        }
+        return AnySequence(r)
     }
 }
 
