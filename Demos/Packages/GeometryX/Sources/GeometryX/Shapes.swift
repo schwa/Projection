@@ -193,11 +193,18 @@ public extension PolygonalChain {
 
 // MARK: -
 
-public struct Quad<Point: PointLike> {
+public struct Quad<Point: VertexLike> {
     public var vertices: (Point, Point, Point, Point)
 
     public init(vertices: (Point, Point, Point, Point)) {
         self.vertices = vertices
+    }
+}
+
+public extension Quad {
+    init(vertices: [Point]) {
+        assert(vertices.count == 4)
+        self.vertices = (vertices[0], vertices[1], vertices[2], vertices[3])
     }
 }
 
@@ -241,7 +248,7 @@ public struct Sphere {
 
 // MARK: -
 
-public struct Triangle<Point: PointLike> {
+public struct Triangle<Point: VertexLike> {
     public var vertices: (Point, Point, Point)
 
     public init(vertices: (Point, Point, Point)) {
@@ -252,5 +259,16 @@ public struct Triangle<Point: PointLike> {
 public extension Triangle {
     var reversed: Triangle {
         .init(vertices: (vertices.2, vertices.1, vertices.0))
+    }
+}
+
+
+public struct Cylinder {
+    public var radius: Float
+    public var depth: Float
+
+    public init(radius: Float, depth: Float) {
+        self.radius = radius
+        self.depth = depth
     }
 }

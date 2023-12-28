@@ -19,7 +19,7 @@ struct ExtrusionView: View {
     var path: Path
 
     @State
-    var mesh: TrivialMesh<UInt, SIMD3<Float>>
+    var mesh: TrivialMesh<UInt, SimpleVertex>
 
     @State
     var source: String

@@ -17,14 +17,12 @@ struct RevolveView: View {
             [0, 2.5, 0],
         ])
         axis = Line<SIMD3<Float>>(point: [0, 0, 0], direction: [0, 1, 0])
-        mesh = revolve(polygonalChain: polygonalChain, axis: axis, range: .degrees(0) ... .degrees(360), segments: 24)
+        mesh = revolve(polygonalChain: polygonalChain, axis: axis, range: .degrees(0) ... .degrees(360), segments: 4)
     }
 
     var body: some View {
         SoftwareRendererView { _, _, context3D in
-
-            context3D.stroke(path: Path3D(polygonalChain), with: .color(.purple), lineWidth: 2)
-
+//            context3D.stroke(path: Path3D(polygonalChain), with: .color(.purple), lineWidth: 2)
             var rasterizer = context3D.rasterizer
             for (index, polygon) in mesh.toPolygons().enumerated() {
                 rasterizer.submit(polygon: polygon.map { $0 }, with: .color(Color(rgb: kellyColors[index % kellyColors.count])))
