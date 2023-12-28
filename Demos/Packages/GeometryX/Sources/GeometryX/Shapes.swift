@@ -13,6 +13,18 @@ public struct Box<Point: PointLike> {
 
 // MARK: -
 
+public struct Cylinder {
+    public var radius: Float
+    public var depth: Float
+
+    public init(radius: Float, depth: Float) {
+        self.radius = radius
+        self.depth = depth
+    }
+}
+
+// MARK: -
+
 public struct Line<Point: PointLike> {
     public var point: Point
     public var direction: Point // TODO: Vector not Point.
@@ -259,16 +271,5 @@ public struct Triangle<Point: VertexLike> {
 public extension Triangle {
     var reversed: Triangle {
         .init(vertices: (vertices.2, vertices.1, vertices.0))
-    }
-}
-
-
-public struct Cylinder {
-    public var radius: Float
-    public var depth: Float
-
-    public init(radius: Float, depth: Float) {
-        self.radius = radius
-        self.depth = depth
     }
 }

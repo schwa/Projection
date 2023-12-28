@@ -4,10 +4,6 @@ public protocol PolygonConvertable {
     func toPolygons() -> [Polygon<SimpleVertex>]
 }
 
-public protocol MeshConvertable {
-    func toMesh() -> TrivialMesh<UInt, SIMD3<Float>>
-}
-
 extension Box: PolygonConvertable where Point == SIMD3<Float> {
     public func toPolygons() -> [Polygon<SimpleVertex>] {
         let polygons = [

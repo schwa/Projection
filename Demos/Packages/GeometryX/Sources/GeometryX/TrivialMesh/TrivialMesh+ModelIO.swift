@@ -70,3 +70,12 @@ public extension MDLMesh {
         self.init(vertexBuffer: vertexBuffer, vertexCount: mesh.vertices.count, descriptor: descriptor, submeshes: [submesh])
     }
 }
+
+public extension TrivialMesh where Vertex == SimpleVertex {
+    func write(to url: URL) throws {
+        let asset = MDLAsset()
+        let mesh = MDLMesh(trivialMesh: self)
+        asset.add(mesh)
+        try asset.export(to: url)
+    }
+}
