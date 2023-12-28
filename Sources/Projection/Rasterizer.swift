@@ -5,6 +5,7 @@ public struct Rasterizer {
 
     public struct Options {
         public var drawNormals = false
+        public var normalsLength = 1.0
         public var shadeFragmentsWithNormals = false
         public var fill = true
         public var stroke = false
@@ -88,7 +89,7 @@ public struct Rasterizer {
                 let center = (fragment.modelSpaceVertices.reduce(.zero, +) / Float(fragment.modelSpaceVertices.count))
                 let path = Path3D { path in
                     path.move(to: center)
-                    path.addLine(to: center + fragment.modelSpaceNormal)
+                    path.addLine(to: center + fragment.modelSpaceNormal * Float(options.normalsLength))
                 }
                 graphicsContext.stroke(path: path, with: backFacing ? .color(.red) : .color(.blue))
             }

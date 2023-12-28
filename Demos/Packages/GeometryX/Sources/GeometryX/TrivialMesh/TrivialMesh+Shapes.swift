@@ -66,6 +66,7 @@ extension TrivialMesh where Vertex == SimpleVertex {
     }
 }
 
+#if os(visionOS)
 public struct MeshView: View {
     let mesh: TrivialMesh <UInt32, SimpleVertex>
 
@@ -87,3 +88,4 @@ public struct MeshView: View {
     MeshView(mesh: TrivialMesh(cylinder: Cylinder(radius: 0.1, depth: 0.01), segments: 24))
     //MeshView(mesh: TrivialMesh(circleRadius: 1, segments: 24))
 }
+#endif

@@ -55,7 +55,7 @@ struct ExtrusionView: View {
             SoftwareRendererView { _, _, context3D in
                 var rasterizer = context3D.rasterizer
                 for (index, polygon) in mesh.toPolygons().enumerated() {
-                    rasterizer.submit(polygon: polygon.map { $0 }, with: .color(Color(rgb: kellyColors[index % kellyColors.count])))
+                    rasterizer.submit(polygon: polygon.map { $0.position }, with: .color(Color(rgb: kellyColors[index % kellyColors.count])))
                 }
                 rasterizer.rasterize()
 //                context3D.stroke(path: Path3D(path: path), with: .color(.black), lineWidth: 1)
