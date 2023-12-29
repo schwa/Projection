@@ -7,7 +7,7 @@ struct MeshView: View {
     enum Source: Hashable {
         case file(String)
         case extrusion(String)
-        //        case revolve(Path)
+        case revolve(String)
     }
 
     static let sources: [Source] = [
@@ -18,6 +18,7 @@ struct MeshView: View {
         .file("Icosphere"),
         .extrusion("star"),
         .extrusion("square"),
+        .revolve("?")
     ]
 
     @State
@@ -88,6 +89,8 @@ struct MeshView: View {
                         Label("File: \(name)", systemImage: "doc").tag(Optional(source))
                     case .extrusion(let name):
                         Label("Extrusion: \(name)", systemImage: "cube").tag(Optional(source))
+                    case .revolve(let name):
+                        Label("Revolve: \(name)", systemImage: "cube").tag(Optional(source))
                     }
                 }
             }
@@ -125,6 +128,16 @@ struct MeshView: View {
                 let polygons = path.polygonalChains.filter(\.isClosed).map { Polygon(polygonalChain: $0) }
                 var mesh = TrivialMesh(merging: polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) })
                 mesh = mesh.offset(by: -mesh.boundingBox.min)
+                self.mesh = TrivialMesh(other: mesh)
+            case .revolve:
+                let polygonalChain = PolygonalChain<SIMD3<Float>>(vertices: [
+                    [0, 0, 0],
+                    [-1, 0, 0],
+                    [-1, 2.5, 0],
+                    [0, 2.5, 0],
+                ])
+                let axis = Line<SIMD3<Float>>(point: [0, 0, 0], direction: [0, 1, 0])
+                let mesh = revolve(polygonalChain: polygonalChain, axis: axis, range: .degrees(0) ... .degrees(360), segments: 12)
                 self.mesh = TrivialMesh(other: mesh)
             default:
                 break
@@ -182,8 +195,16 @@ struct Identified <ID, Value>: Identifiable where ID: Hashable {
 
 extension TrivialMesh {
     init<O>(other: TrivialMesh<O, Vertex>) {
-
         self.init(indices: other.indices.map { Index($0) }, vertices: other.vertices)
+    }
+}
 
+extension TrivialMesh where Vertex == SimpleVertex {
+    init<O>(other: TrivialMesh<O, SIMD3<Float>>) {
+        let vertices = other.vertices.map {
+            SimpleVertex(position: $0, normal: .zero)
+        }
+        let mesh = TrivialMesh(indices: other.indices.map { Index($0) }, vertices: vertices)
+        self = mesh.renormalize()
     }
 }

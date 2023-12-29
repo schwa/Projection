@@ -30,7 +30,6 @@
 		452299CF2B0832B900812D1A /* Inspectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CE2B0832B900812D1A /* Inspectors.swift */; };
 		452299D22B0832E100812D1A /* SwiftFormats in Frameworks */ = {isa = PBXBuildFile; productRef = 452299D12B0832E100812D1A /* SwiftFormats */; };
 		4564DED92B1FAC3200A76C03 /* GeometryX in Frameworks */ = {isa = PBXBuildFile; productRef = 4564DED82B1FAC3200A76C03 /* GeometryX */; };
-		4564DEDB2B1FB16100A76C03 /* RevolveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4564DEDA2B1FB16100A76C03 /* RevolveView.swift */; };
 		45E61CDA2B3E313B001467C2 /* Cube.ply in Resources */ = {isa = PBXBuildFile; fileRef = 45E61CD92B3E313B001467C2 /* Cube.ply */; };
 		45E61CDC2B3E329A001467C2 /* Square.ply in Resources */ = {isa = PBXBuildFile; fileRef = 45E61CDB2B3E329A001467C2 /* Square.ply */; };
 		45E61CDE2B3E329E001467C2 /* Icosphere.ply in Resources */ = {isa = PBXBuildFile; fileRef = 45E61CDD2B3E329E001467C2 /* Icosphere.ply */; };
@@ -54,7 +53,6 @@
 		452299CC2B08103B00812D1A /* Path+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Path+Extensions.swift"; sourceTree = "<group>"; };
 		452299CE2B0832B900812D1A /* Inspectors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspectors.swift; sourceTree = "<group>"; };
 		4564DED72B1FAC2A00A76C03 /* GeometryX */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GeometryX; sourceTree = "<group>"; };
-		4564DEDA2B1FB16100A76C03 /* RevolveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevolveView.swift; sourceTree = "<group>"; };
 		45E61CD82B3E25E7001467C2 /* Projection */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Projection; path = ../..; sourceTree = "<group>"; };
 		45E61CD92B3E313B001467C2 /* Cube.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.ply; sourceTree = "<group>"; };
 		45E61CDB2B3E329A001467C2 /* Square.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Square.ply; sourceTree = "<group>"; };
@@ -154,7 +152,6 @@
 				4517B4B52B093D78008A0863 /* BoxesView.swift */,
 				452299CE2B0832B900812D1A /* Inspectors.swift */,
 				452299A42B07E1C400812D1A /* BallRotationModifier.swift */,
-				4564DEDA2B1FB16100A76C03 /* RevolveView.swift */,
 			);
 			path = DemoViews;
 			sourceTree = "<group>";
@@ -259,7 +256,6 @@
 				452299A52B07E1C400812D1A /* BallRotationModifier.swift in Sources */,
 				452299A12B07DE1200812D1A /* Projections.swift in Sources */,
 				4522999F2B07DDB200812D1A /* Support.swift in Sources */,
-				4564DEDB2B1FB16100A76C03 /* RevolveView.swift in Sources */,
 				4522998F2B07DC8B00812D1A /* SoftwareRendererView.swift in Sources */,
 				4504788F2B0AB69D00267CA8 /* MeshView.swift in Sources */,
 				452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */,

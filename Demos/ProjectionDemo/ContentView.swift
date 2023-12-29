@@ -4,18 +4,15 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                NavigationLink("(Bare) SoftwareRendererView") {
-                    SoftwareRendererView() { _, _, _ in
-                    }
-                }
-                NavigationLink("BoxesView") {
-                    BoxesView()
-                }
+//                NavigationLink("(Bare) SoftwareRendererView") {
+//                    SoftwareRendererView() { _, _, _ in
+//                    }
+//                }
                 NavigationLink("MeshView") {
                     MeshView()
                 }
-                NavigationLink("RevolveView") {
-                    RevolveView()
+                NavigationLink("BoxesView") {
+                    BoxesView()
                 }
             }
         }

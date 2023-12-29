@@ -189,10 +189,12 @@ public extension TrivialMesh where Vertex == SimpleVertex {
         }
     }
 
-    func renormalize() -> Self {
-        // Regenerate mesh from mesh's triangles to make sure no vertices are re-used.
+    func renormalize(averaging: Bool = true) -> Self {
+        // Step 1. Regenerate mesh from mesh's triangles to make sure no vertices are re-used.
         let mesh = TrivialMesh(triangles: triangles, optimizing: false)
-        let vertices = mesh.indices.chunks(ofCount: 3).reduce(into: mesh.vertices) { vertices, indices in
+
+        // Step 2. Generate triangle normals.
+        var vertices = mesh.indices.chunks(ofCount: 3).reduce(into: mesh.vertices) { vertices, indices in
             let indices = indices.map { Int($0) }
             let p0 = vertices[indices[0]].position
             let p1 = vertices[indices[1]].position
@@ -202,6 +204,24 @@ public extension TrivialMesh where Vertex == SimpleVertex {
             vertices[indices[1]].normal = normal
             vertices[indices[2]].normal = normal
         }
+
+        // Step 3. Optionally average normals.
+        if averaging {
+            // Find all vertex indexes that share a position
+            let indicesByPosition: [SIMD3<Float>: [Int]] = vertices.indices.reduce(into: [:]) { partialResult, index in
+                let vertex = vertices[index]
+                partialResult[vertex.position, default: []].append(index)
+            }
+            // Now assign average normals to all vertices with shared positions
+            indicesByPosition.values.forEach { indices in
+                let normals = indices.map { vertices[$0].normal }
+                let average = normals.reduce(.zero, +) / Float(normals.count)
+                indices.forEach { index in
+                    vertices[index].normal = average
+                }
+            }
+        }
+
         return .init(indices: mesh.indices, vertices: vertices)
     }
 }

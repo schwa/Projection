@@ -25,5 +25,10 @@ struct BoxesView: View {
 
             rasterizer.rasterize()
         }
+        .toolbar {
+            Button("Export") {
+
+            }
+        }
     }
 }
