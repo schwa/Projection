@@ -14,6 +14,9 @@ struct ContentView: View {
                 NavigationLink("BoxesView") {
                     BoxesView()
                 }
+                NavigationLink("HalfEdgeView") {
+                    HalfEdgeView()
+                }
             }
         }
     }

@@ -29,6 +29,7 @@
 		452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CC2B08103B00812D1A /* Path+Extensions.swift */; };
 		452299CF2B0832B900812D1A /* Inspectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CE2B0832B900812D1A /* Inspectors.swift */; };
 		452299D22B0832E100812D1A /* SwiftFormats in Frameworks */ = {isa = PBXBuildFile; productRef = 452299D12B0832E100812D1A /* SwiftFormats */; };
+		454E16C62B3E78FB00EB6996 /* HalfEdgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E16C52B3E78FB00EB6996 /* HalfEdgeView.swift */; };
 		4564DED92B1FAC3200A76C03 /* GeometryX in Frameworks */ = {isa = PBXBuildFile; productRef = 4564DED82B1FAC3200A76C03 /* GeometryX */; };
 		45E61CDA2B3E313B001467C2 /* Cube.ply in Resources */ = {isa = PBXBuildFile; fileRef = 45E61CD92B3E313B001467C2 /* Cube.ply */; };
 		45E61CDC2B3E329A001467C2 /* Square.ply in Resources */ = {isa = PBXBuildFile; fileRef = 45E61CDB2B3E329A001467C2 /* Square.ply */; };
@@ -52,6 +53,7 @@
 		452299AD2B07E3F200812D1A /* Teapot.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Teapot.ply; sourceTree = "<group>"; };
 		452299CC2B08103B00812D1A /* Path+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Path+Extensions.swift"; sourceTree = "<group>"; };
 		452299CE2B0832B900812D1A /* Inspectors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspectors.swift; sourceTree = "<group>"; };
+		454E16C52B3E78FB00EB6996 /* HalfEdgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HalfEdgeView.swift; sourceTree = "<group>"; };
 		4564DED72B1FAC2A00A76C03 /* GeometryX */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GeometryX; sourceTree = "<group>"; };
 		45E61CD82B3E25E7001467C2 /* Projection */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Projection; path = ../..; sourceTree = "<group>"; };
 		45E61CD92B3E313B001467C2 /* Cube.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cube.ply; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				4522997E2B07DC3C00812D1A /* ContentView.swift */,
 				45F6E26D2B0ACB9F000D93DB /* DemoViews */,
 				4522999E2B07DDB200812D1A /* Support.swift */,
+				452299A42B07E1C400812D1A /* BallRotationModifier.swift */,
 				452299A02B07DE1200812D1A /* Projections.swift */,
 				452299CC2B08103B00812D1A /* Path+Extensions.swift */,
 				45E61CD92B3E313B001467C2 /* Cube.ply */,
@@ -151,7 +154,7 @@
 				4504788E2B0AB69D00267CA8 /* MeshView.swift */,
 				4517B4B52B093D78008A0863 /* BoxesView.swift */,
 				452299CE2B0832B900812D1A /* Inspectors.swift */,
-				452299A42B07E1C400812D1A /* BallRotationModifier.swift */,
+				454E16C52B3E78FB00EB6996 /* HalfEdgeView.swift */,
 			);
 			path = DemoViews;
 			sourceTree = "<group>";
@@ -253,6 +256,7 @@
 				4522997F2B07DC3C00812D1A /* ContentView.swift in Sources */,
 				452299CF2B0832B900812D1A /* Inspectors.swift in Sources */,
 				4517B4B62B093D78008A0863 /* BoxesView.swift in Sources */,
+				454E16C62B3E78FB00EB6996 /* HalfEdgeView.swift in Sources */,
 				452299A52B07E1C400812D1A /* BallRotationModifier.swift in Sources */,
 				452299A12B07DE1200812D1A /* Projections.swift in Sources */,
 				4522999F2B07DDB200812D1A /* Support.swift in Sources */,
