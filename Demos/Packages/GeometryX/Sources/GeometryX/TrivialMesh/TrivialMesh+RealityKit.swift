@@ -2,7 +2,7 @@ import ModelIO
 import RealityKit
 
 public extension MeshDescriptor {
-    init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>) {
+    init(trivialMesh mesh: TrivialMesh<SimpleVertex>) {
         self = MeshDescriptor()
         // TODO: We're ignoring normals and texture coordinates for now.
         assert(mesh.isValid)
@@ -14,7 +14,7 @@ public extension MeshDescriptor {
 }
 
 public extension ModelComponent {
-    init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>, materials: [Material] = []) throws {
+    init(trivialMesh mesh: TrivialMesh<SimpleVertex>, materials: [Material] = []) throws {
         let meshDescriptor = MeshDescriptor(trivialMesh: mesh)
         let meshResource = try MeshResource.generate(from: [meshDescriptor])
         self = ModelComponent(mesh: meshResource, materials: materials)
@@ -22,7 +22,7 @@ public extension ModelComponent {
 }
 
 public extension ModelEntity {
-    convenience init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>, materials: [Material] = []) throws {
+    convenience init(trivialMesh mesh: TrivialMesh<SimpleVertex>, materials: [Material] = []) throws {
         let modelComponent = try! ModelComponent(trivialMesh: mesh, materials: materials)
         self.init()
         self.components.set(modelComponent)

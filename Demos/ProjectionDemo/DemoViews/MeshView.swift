@@ -25,7 +25,7 @@ struct MeshView: View {
     var source: Source?
 
     @State
-    var mesh: TrivialMesh<UInt32, SimpleVertex>?
+    var mesh: TrivialMesh<SimpleVertex>?
 
     @State
     var vertexNormals: Bool = false
@@ -128,7 +128,7 @@ struct MeshView: View {
                 let polygons = path.polygonalChains.filter(\.isClosed).map { Polygon(polygonalChain: $0) }
                 var mesh = TrivialMesh(merging: polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) })
                 mesh = mesh.offset(by: -mesh.boundingBox.min)
-                self.mesh = TrivialMesh(other: mesh)
+                self.mesh = mesh
             case .revolve:
                 let polygonalChain = PolygonalChain<SIMD3<Float>>(vertices: [
                     [0, 0, 0],
@@ -193,18 +193,12 @@ struct Identified <ID, Value>: Identifiable where ID: Hashable {
     var value: Value
 }
 
-extension TrivialMesh {
-    init<O>(other: TrivialMesh<O, Vertex>) {
-        self.init(indices: other.indices.map { Index($0) }, vertices: other.vertices)
-    }
-}
-
 extension TrivialMesh where Vertex == SimpleVertex {
-    init<O>(other: TrivialMesh<O, SIMD3<Float>>) {
+    init(other: TrivialMesh<SIMD3<Float>>) {
         let vertices = other.vertices.map {
             SimpleVertex(position: $0, normal: .zero)
         }
-        let mesh = TrivialMesh(indices: other.indices.map { Index($0) }, vertices: vertices)
+        let mesh = TrivialMesh(indices: other.indices, vertices: vertices)
         self = mesh.renormalize()
     }
 }

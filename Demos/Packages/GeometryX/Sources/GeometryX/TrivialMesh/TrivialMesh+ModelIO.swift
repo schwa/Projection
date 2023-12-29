@@ -6,22 +6,23 @@ enum TrivialMeshError: Error {
     case generic(String)
 }
 
-public extension TrivialMesh where Index == UInt32, Vertex == SIMD3<Float> {
+public extension TrivialMesh where Vertex == SIMD3<Float> {
     init(url: URL) throws {
         let asset = MDLAsset(url: url)
         let mesh = asset.object(at: 0) as! MDLMesh
         let positions = try mesh.positions
         // TODO: confirm that these are triangles.
+        // TODO: confirm that index is uint32
         let submesh = mesh.submeshes![0] as! MDLSubmesh
         let indexBuffer = submesh.indexBuffer
         let indexBytes = UnsafeRawBufferPointer(start: indexBuffer.map().bytes, count: indexBuffer.length)
-        let indices = indexBytes.bindMemory(to: UInt32.self)
+        let indices = indexBytes.bindMemory(to: UInt32.self).map { Int($0) }
 
         self.init(indices: Array(indices), vertices: Array(positions.map { SIMD3<Float>($0) }))
     }
 }
 
-public extension TrivialMesh where Index == UInt32, Vertex == SimpleVertex {
+public extension TrivialMesh where Vertex == SimpleVertex {
     init(url: URL) throws {
         let asset = MDLAsset(url: url)
         let mesh = asset.object(at: 0) as! MDLMesh
@@ -38,10 +39,11 @@ public extension TrivialMesh where Index == UInt32, Vertex == SimpleVertex {
         }
 
         // TODO: confirm that these are triangles.
+        // TODO: confirm that index is uint32
         let submesh = mesh.submeshes![0] as! MDLSubmesh
         let indexBuffer = submesh.indexBuffer
         let indexBytes = UnsafeRawBufferPointer(start: indexBuffer.map().bytes, count: indexBuffer.length)
-        let indices = indexBytes.bindMemory(to: UInt32.self)
+        let indices = indexBytes.bindMemory(to: UInt32.self).map { Int($0) }
 
         self.init(indices: Array(indices), vertices: vertices)
     }
@@ -103,7 +105,7 @@ extension DataProtocol {
 }
 
 public extension MDLMesh {
-    convenience init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>) {
+    convenience init(trivialMesh mesh: TrivialMesh<SimpleVertex>) {
         let vertexBuffer = mesh.vertices.withUnsafeBytes { buffer in
             MDLMeshBufferData(type: .vertex, data: Data(buffer))
         }

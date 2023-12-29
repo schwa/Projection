@@ -4,9 +4,9 @@ import SwiftUI
 import RealityKit
 
 public struct MeshView: View {
-    let mesh: TrivialMesh <UInt32, SimpleVertex>
+    let mesh: TrivialMesh <SimpleVertex>
 
-    public init(mesh: TrivialMesh<UInt32, SimpleVertex>) {
+    public init(mesh: TrivialMesh<SimpleVertex>) {
         self.mesh = mesh
     }
 

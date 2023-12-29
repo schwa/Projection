@@ -1,3 +1,3 @@
 public protocol MeshConvertable {
-    func toMesh() -> TrivialMesh<UInt, SIMD3<Float>>
+    func toMesh() -> TrivialMesh<SIMD3<Float>>
 }

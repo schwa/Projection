@@ -2,7 +2,7 @@ import Foundation
 import SceneKit
 
 public extension SCNNode {
-    convenience init(trivialMesh mesh: TrivialMesh<some UnsignedInteger & BinaryInteger, SimpleVertex>, color: CGColor) throws {
+    convenience init(trivialMesh mesh: TrivialMesh<SimpleVertex>, color: CGColor) throws {
         self.init()
         let positions = SCNGeometrySource(vertices: mesh.vertices.map { SCNVector3($0.position) })
         let normals = SCNGeometrySource(normals: mesh.vertices.map { SCNVector3($0.normal) })

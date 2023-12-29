@@ -1,13 +1,13 @@
-import simd
 import Algorithms
+import simd
 
 // TODO: Rename to "TriangleMesh"
-public struct TrivialMesh<Index, Vertex> where Index: UnsignedInteger & BinaryInteger, Vertex: Equatable {
+public struct TrivialMesh<Vertex> where Vertex: Equatable {
     public var label: String?
-    public var indices: [Index]
+    public var indices: [Int]
     public var vertices: [Vertex]
 
-    public init(label: String? = nil, indices: [Index], vertices: [Vertex]) {
+    public init(label: String? = nil, indices: [Int], vertices: [Vertex]) {
         self.label = label
         self.indices = indices
         self.vertices = vertices
@@ -24,7 +24,7 @@ public extension TrivialMesh {
     init(merging meshes: [TrivialMesh]) {
         self = meshes.reduce(into: TrivialMesh()) { result, mesh in
             let offset = result.vertices.count
-            result.indices.append(contentsOf: mesh.indices.map { $0 + Index(offset) })
+            result.indices.append(contentsOf: mesh.indices.map { $0 + Int(offset) })
             result.vertices.append(contentsOf: mesh.vertices)
             // TODO: Does not compact vertices
         }
@@ -32,10 +32,10 @@ public extension TrivialMesh {
 
     mutating func append(vertex: Vertex, optimizing: Bool = true) {
         if optimizing, let index = vertices.firstIndex(of: vertex) {
-            indices.append(Index(index))
+            indices.append(index)
         }
         else {
-            indices.append(Index(vertices.count))
+            indices.append(vertices.count)
             vertices.append(vertex)
         }
     }
@@ -48,7 +48,7 @@ public extension TrivialMesh {
     }
 
     func transformedVertices(_ transform: (Vertex) -> Vertex) -> Self {
-        return TrivialMesh(indices: indices, vertices: vertices.map { transform($0) })
+        TrivialMesh(indices: indices, vertices: vertices.map { transform($0) })
     }
 }
 
@@ -129,7 +129,6 @@ public extension TrivialMesh where Vertex == SimpleVertex {
             var vertex = $0
             vertex.normal *= -1
             return vertex
-
         }
         return TrivialMesh(indices: indices, vertices: vertices)
     }
@@ -160,9 +159,9 @@ public extension TrivialMesh where Vertex == SimpleVertex {
         // Bad vertices
         if vertices.contains(where: {
             $0.position.x.isNaN || $0.position.y.isNaN || $0.position.y.isNaN
-            || $0.position.x.isInfinite || $0.position.y.isInfinite || $0.position.y.isInfinite
-            || $0.normal.x.isNaN || $0.normal.y.isNaN || $0.normal.y.isNaN
-            || $0.normal.x.isInfinite || $0.normal.y.isInfinite || $0.normal.y.isInfinite
+                || $0.position.x.isInfinite || $0.position.y.isInfinite || $0.position.y.isInfinite
+                || $0.normal.x.isNaN || $0.normal.y.isNaN || $0.normal.y.isNaN
+                || $0.normal.x.isInfinite || $0.normal.y.isInfinite || $0.normal.y.isInfinite
         }) {
             return false
         }
@@ -177,7 +176,6 @@ public extension TrivialMesh where Vertex == SimpleVertex {
 
         return true
     }
-
 
     var triangles: [Triangle<SimpleVertex>] {
         indices.chunks(ofCount: 3).map { indices in

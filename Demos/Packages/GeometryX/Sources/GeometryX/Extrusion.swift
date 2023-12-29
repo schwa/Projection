@@ -25,7 +25,7 @@ public extension ExtrusionAxis {
 }
 
 public extension PolygonalChain where Point == CGPoint {
-    func extrude(min: Float, max: Float, axis: ExtrusionAxis = .z) -> TrivialMesh<UInt, SimpleVertex> {
+    func extrude(min: Float, max: Float, axis: ExtrusionAxis = .z) -> TrivialMesh<SimpleVertex> {
         let quads: [Quad<SimpleVertex>] = vertices.windows(ofCount: 2).reduce(into: []) { result, window in
             let from = SIMD2<Float>(x: Float(window.first!.x), y: Float(window.first!.y))
             let to = SIMD2<Float>(x: Float(window.last!.x), y: Float(window.last!.y))
@@ -48,7 +48,7 @@ public extension PolygonalChain where Point == CGPoint {
             ))
             result.append(quad)
         }
-        let mesh = TrivialMesh<UInt, SimpleVertex>(quads: quads)
+        let mesh = TrivialMesh<SimpleVertex>(quads: quads)
         return mesh
     }
 }
@@ -62,15 +62,15 @@ extension Quad {
 }
 
 public extension Polygon where Vertex == CGPoint {
-    func extrude(min: Float, max: Float, axis: ExtrusionAxis = .z, walls: Bool = true, topCap: Bool, bottomCap: Bool) -> TrivialMesh<UInt, SimpleVertex> {
+    func extrude(min: Float, max: Float, axis: ExtrusionAxis = .z, walls: Bool = true, topCap: Bool, bottomCap: Bool) -> TrivialMesh<SimpleVertex> {
         let walls = walls ? PolygonalChain(polygon: self).extrude(min: min, max: max, axis: axis) : nil
         let topCap = topCap ? triangulate(z: max, transform: axis.transform) : nil
         let bottomCap = bottomCap ? triangulate(z: min, transform: axis.transform).flipped() : nil
         return TrivialMesh(merging: Array([walls, topCap, bottomCap].compacted()))
     }
 
-    func triangulate(z: Float = 0, transform: simd_float3x3 = .init(diagonal: [1, 1, 1])) -> TrivialMesh<UInt, SimpleVertex> {
-        let indices = earcut(polygons: [vertices.map({ SIMD2($0) })]).map({ UInt($0) })
+    func triangulate(z: Float = 0, transform: simd_float3x3 = .init(diagonal: [1, 1, 1])) -> TrivialMesh<SimpleVertex> {
+        let indices = earcut(polygons: [vertices.map({ SIMD2($0) })]).map({ Int($0) })
         assert(!indices.isEmpty)
         let vertices = vertices.map {
             // TODO: We're not calculating texture coordinate here.

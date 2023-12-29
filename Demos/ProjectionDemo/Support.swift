@@ -53,7 +53,7 @@ public extension Camera {
 }
 
 extension [LineSegment<CGPoint>] {
-    func extrude(minY: Float, maxY: Float) -> TrivialMesh<UInt, SIMD3<Float>> {
+    func extrude(minY: Float, maxY: Float) -> TrivialMesh<SIMD3<Float>> {
         var quads: [Quad<SIMD3<Float>>] = []
         forEach { segment in
             let from = SIMD2<Float>(segment.start)
@@ -66,7 +66,7 @@ extension [LineSegment<CGPoint>] {
             ))
             quads.append(quad)
         }
-        let mesh = TrivialMesh<UInt, SIMD3<Float>>(quads: quads)
+        let mesh = TrivialMesh<SIMD3<Float>>(quads: quads)
         return mesh
     }
 }

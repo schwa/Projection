@@ -4,14 +4,14 @@ import SIMDSupport
 
 // TODO: Experimental
 
-public func revolve(polygonalChain: PolygonalChain<SIMD3<Float>>, axis: Line<SIMD3<Float>>, range: ClosedRange<Angle<Float>>) -> TrivialMesh<UInt, SIMD3<Float>> {
+public func revolve(polygonalChain: PolygonalChain<SIMD3<Float>>, axis: Line<SIMD3<Float>>, range: ClosedRange<Angle<Float>>) -> TrivialMesh<SIMD3<Float>> {
     let quads = polygonalChain.segments.map {
         revolve(lineSegment: $0, axis: axis, range: range)
     }
     return TrivialMesh(quads: quads)
 }
 
-public func revolve(polygonalChain: PolygonalChain<SIMD3<Float>>, axis: Line<SIMD3<Float>>, range: ClosedRange<Angle<Float>>, segments: Int) -> TrivialMesh<UInt, SIMD3<Float>> {
+public func revolve(polygonalChain: PolygonalChain<SIMD3<Float>>, axis: Line<SIMD3<Float>>, range: ClosedRange<Angle<Float>>, segments: Int) -> TrivialMesh<SIMD3<Float>> {
     let by = Angle<Float>(radians: (range.upperBound.radians - range.lowerBound.radians) / Float(segments))
     let quads = stride(from: range.lowerBound, to: range.upperBound, by: by).flatMap { start in
         let range = start ... start + by

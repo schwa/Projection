@@ -3,7 +3,7 @@ import SwiftUI
 import RealityKit
 import ModelIO
 
-public extension TrivialMesh where Index == UInt32, Vertex == SimpleVertex {
+public extension TrivialMesh where Vertex == SimpleVertex {
     init(cylinder: Cylinder, segments: Int) {
         let halfDepth = cylinder.depth / 2
         let circle = TrivialMesh(circleRadius: cylinder.radius, segments: segments)
@@ -46,9 +46,9 @@ public extension TrivialMesh where Index == UInt32, Vertex == SimpleVertex {
         let vertices = vertices2D.map {
             return SimpleVertex(position: SIMD3<Float>($0.x, $0.y, 0), normal: [0, 0, 1], textureCoordinate: $0)
         }
-        let indices: [UInt32] = (0..<UInt32(segments)).flatMap {
+        let indices: [Int] = (0..<segments).flatMap {
             let p1 = 1 + $0
-            let p2 = 1 + ($0 + 1) % UInt32(segments)
+            let p2 = 1 + ($0 + 1) % segments
             return [0, p1, p2]
         }
         self = .init(indices: indices, vertices: vertices)
