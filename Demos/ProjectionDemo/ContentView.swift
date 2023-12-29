@@ -14,9 +14,6 @@ struct ContentView: View {
                 NavigationLink("MeshView") {
                     MeshView()
                 }
-                NavigationLink("ExtrusionView") {
-                    ExtrusionView()
-                }
                 NavigationLink("RevolveView") {
                     RevolveView()
                 }

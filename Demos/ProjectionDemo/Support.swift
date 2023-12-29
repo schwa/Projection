@@ -4,6 +4,16 @@ import simd
 import SIMDSupport
 import SwiftUI
 import GeometryX
+import Algorithms
+import CoreGraphicsSupport
+import CoreText
+import earcut
+import Everything
+import SwiftUI
+import UniformTypeIdentifiers
+import Projection
+import ModelIO
+import GeometryX
 
 public struct Camera {
     public var transform: Transform
@@ -155,4 +165,54 @@ extension Array {
             }
         }
     }
+}
+
+extension Path3D {
+    init(path: Path) {
+        let elements = path.elements
+        self = Path3D { path in
+            for element in elements {
+                switch element {
+                case .move(let point):
+                    path.move(to: SIMD3(xy: SIMD2(point)))
+                case .line(let point):
+                    path.addLine(to: SIMD3(xy: SIMD2(point)))
+                case .closeSubpath:
+                    path.closePath()
+                default:
+                    fatalError("Unimplemented")
+                }
+            }
+        }
+    }
+}
+
+extension Path {
+    static func star(points: Int, innerRadius: Double, outerRadius: Double) -> Path {
+        var path = Path()
+        assert(points > 1, "Number of points should be greater than 1 for a star")
+        var angle = -0.5 * .pi // Starting from the top
+        for n in 0..<points * 2 {
+            let radius = n % 2 == 0 ? outerRadius : innerRadius
+            let point = CGPoint(x: radius * cos(angle), y: radius * sin(angle))
+            if path.isEmpty {
+                path.move(to: point)
+            } else {
+                path.addLine(to: point)
+            }
+            angle += .pi / Double(points)
+        }
+        path.closeSubpath()
+        return path
+    }
+}
+
+public extension SIMD3 where Scalar: BinaryFloatingPoint {
+    init(xy: SIMD2<Scalar>) {
+        self = SIMD3(xy[0], xy[1], 0)
+    }
+}
+
+extension UTType {
+    static let plyFile = UTType(importedAs: "public.polygon-file-format")
 }

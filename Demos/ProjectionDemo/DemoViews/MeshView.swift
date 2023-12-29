@@ -4,64 +4,91 @@ import SwiftUI
 import GeometryX
 
 struct MeshView: View {
-    static let models = ["Teapot", "Monkey", "Cube", "Square", "Icosphere"]
+    enum Source: Hashable {
+        case file(String)
+        case extrusion(String)
+        //        case revolve(Path)
+    }
+
+    static let sources: [Source] = [
+        .file("Teapot"),
+        .file("Monkey"),
+        .file("Cube"),
+        .file("Square"),
+        .file("Icosphere"),
+        .extrusion("star"),
+        .extrusion("square"),
+    ]
 
     @State
-    var model: String = "Teapot"
+    var source: Source?
 
     @State
-    var mesh: TrivialMesh<UInt32, SimpleVertex>
+    var mesh: TrivialMesh<UInt32, SimpleVertex>?
+
+    @State
+    var vertexNormals: Bool = false
 
     enum Mode {
         case model
         case vertices
+        case source
     }
 
     @State
     var mode: Mode = .model
 
-
-    init() {
-        let url = Bundle.main.url(forResource: "Teapot", withExtension: "ply")!
-        mesh = try! TrivialMesh(url: url)
-    }
-
     var body: some View {
         ZStack {
-            switch mode {
-            case .model:
-                SoftwareRendererView { _, _, context3D in
-                    var rasterizer = context3D.rasterizer
-                    for (index, polygon) in mesh.toPolygons().enumerated() {
-                        rasterizer.submit(polygon: polygon.map { $0.position }, with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
-                    }
-                    rasterizer.rasterize()
-                    context3D.stroke(path: Path3D(box: mesh.boundingBox), with: .color(.purple))
-                    for vertex in mesh.vertices {
-                        let path = Path3D { path in
-                            path.move(to: vertex.position)
-                            path.addLine(to: vertex.position + vertex.normal * 0.25)
+            if let mesh {
+                switch mode {
+                case .model:
+                    SoftwareRendererView { _, _, context3D in
+                        var rasterizer = context3D.rasterizer
+                        for (index, polygon) in mesh.toPolygons().enumerated() {
+                            rasterizer.submit(polygon: polygon.map { $0.position }, with: .color(Color(rgb: kellyColors[index % kellyColors.count]).opacity(0.8)))
                         }
-                        context3D.stroke(path: path, with: .color(.blue))
+                        rasterizer.rasterize()
+                        context3D.stroke(path: Path3D(box: mesh.boundingBox), with: .color(.purple))
+                        if vertexNormals {
+                            for vertex in mesh.vertices {
+                                let path = Path3D { path in
+                                    path.move(to: vertex.position)
+                                    path.addLine(to: vertex.position + vertex.normal * 0.25)
+                                }
+                                context3D.stroke(path: path, with: .color(.blue))
+                            }
+                        }
                     }
-                }
-            case .vertices:
-                Table(mesh.vertices.indices.map { Identified(id: $0, value: mesh.vertices[Int($0)])}) {
-                    TableColumn("Position X") { Text(verbatim: "\($0.value.position.x)") }
-                    TableColumn("Position Y") { Text(verbatim: "\($0.value.position.y)") }
-                    TableColumn("Position Z") { Text(verbatim: "\($0.value.position.z)") }
-                    TableColumn("Normal X") { Text(verbatim: "\($0.value.normal.x)") }
-                    TableColumn("Normal Y") { Text(verbatim: "\($0.value.normal.y)") }
-                    TableColumn("Normal Z") { Text(verbatim: "\($0.value.normal.z)") }
-                    TableColumn("Texture X") { Text(verbatim: "\($0.value.textureCoordinate.x)") }
-                    TableColumn("Texture Y") { Text(verbatim: "\($0.value.textureCoordinate.y)") }
+                case .vertices:
+                    Table(mesh.vertices.indices.map { Identified(id: $0, value: mesh.vertices[Int($0)])}) {
+                        TableColumn("Position X") { Text(verbatim: "\($0.value.position.x)") }
+                        TableColumn("Position Y") { Text(verbatim: "\($0.value.position.y)") }
+                        TableColumn("Position Z") { Text(verbatim: "\($0.value.position.z)") }
+                        TableColumn("Normal X") { Text(verbatim: "\($0.value.normal.x)") }
+                        TableColumn("Normal Y") { Text(verbatim: "\($0.value.normal.y)") }
+                        TableColumn("Normal Z") { Text(verbatim: "\($0.value.normal.z)") }
+                        TableColumn("Texture X") { Text(verbatim: "\($0.value.textureCoordinate.x)") }
+                        TableColumn("Texture Y") { Text(verbatim: "\($0.value.textureCoordinate.y)") }
+                    }
+                case .source:
+                    Text(mesh.toPLY())
                 }
             }
         }
+        .onAppear {
+            source = Self.sources.first
+        }
         .toolbar {
-            Picker("Model", selection: $model) {
-                ForEach(Self.models, id: \.self) { model in
-                    Text(verbatim: model).tag(model)
+            Picker("Source", selection: $source) {
+                Text("None").tag(Optional<Source>.none)
+                ForEach(Self.sources, id: \.self) { source in
+                    switch source {
+                    case .file(let name):
+                        Label("File: \(name)", systemImage: "doc").tag(Optional(source))
+                    case .extrusion(let name):
+                        Label("Extrusion: \(name)", systemImage: "cube").tag(Optional(source))
+                    }
                 }
             }
             .fixedSize()
@@ -69,13 +96,40 @@ struct MeshView: View {
             Picker("Mode", selection: $mode) {
                 Text(verbatim: "Render").tag(Mode.model)
                 Text(verbatim: "Vertices").tag(Mode.vertices)
+                Text(verbatim: "Source").tag(Mode.source)
             }
             .pickerStyle(.segmented)
             .fixedSize()
+
+            Button("Renormalize") {
+                self.mesh = mesh?.renormalize()
+            }
+
+            Toggle("Vertex Normals", isOn: $vertexNormals)
         }
-        .onChange(of: model) {
-            let url = Bundle.main.url(forResource: model, withExtension: "ply")!
-            mesh = try! TrivialMesh(url: url).renormalize()
+        .onChange(of: source) {
+            switch source {
+            case .file(let name):
+                let url = Bundle.main.url(forResource: name, withExtension: "ply")!
+                mesh = try! TrivialMesh(url: url)
+            case .extrusion(let name):
+                let path: Path
+                switch name {
+                case "star":
+                    path = Path.star(points: 12, innerRadius: 0.5, outerRadius: 1)
+                case "square":
+                    path = Path(CGRect(center: .zero, radius: 1))
+                default:
+                    fatalError()
+                }
+                let polygons = path.polygonalChains.filter(\.isClosed).map { Polygon(polygonalChain: $0) }
+                var mesh = TrivialMesh(merging: polygons.map { $0.extrude(min: 0, max: 3, topCap: true, bottomCap: true) })
+                mesh = mesh.offset(by: -mesh.boundingBox.min)
+                self.mesh = TrivialMesh(other: mesh)
+            default:
+                break
+            }
+
         }
     }
 }
@@ -124,4 +178,12 @@ extension Path3D {
 struct Identified <ID, Value>: Identifiable where ID: Hashable {
     var id: ID
     var value: Value
+}
+
+extension TrivialMesh {
+    init<O>(other: TrivialMesh<O, Vertex>) {
+
+        self.init(indices: other.indices.map { Index($0) }, vertices: other.vertices)
+
+    }
 }

@@ -30,12 +30,21 @@ public extension PolygonalChain where Point == CGPoint {
             let from = SIMD2<Float>(x: Float(window.first!.x), y: Float(window.first!.y))
             let to = SIMD2<Float>(x: Float(window.last!.x), y: Float(window.last!.y))
             let transform = axis.transform
-            let normal = SIMD3<Float>(0, 0, 1) * transform
+
+            let vertices = (
+                SIMD3<Float>(from.x, from.y, min) * transform,
+                SIMD3<Float>(to.x, to.y, min) * transform,
+                SIMD3<Float>(from.x, from.y, max) * transform,
+                SIMD3<Float>(to.x, to.y, max) * transform
+            )
+
+            let normal = simd.cross(vertices.1 - vertices.0, vertices.2 - vertices.0).normalized
+
             let quad = Quad(vertices: (
-                SimpleVertex(position: SIMD3<Float>(from.x, from.y, min) * transform, normal: normal),
-                SimpleVertex(position: SIMD3<Float>(to.x, to.y, min) * transform, normal: normal),
-                SimpleVertex(position: SIMD3<Float>(from.x, from.y, max) * transform, normal: normal),
-                SimpleVertex(position: SIMD3<Float>(to.x, to.y, max) * transform, normal: normal)
+                SimpleVertex(position: vertices.0, normal: normal),
+                SimpleVertex(position: vertices.1, normal: normal),
+                SimpleVertex(position: vertices.2, normal: normal),
+                SimpleVertex(position: vertices.3, normal: normal)
             ))
             result.append(quad)
         }

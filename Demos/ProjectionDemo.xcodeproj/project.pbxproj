@@ -26,7 +26,6 @@
 		452299AE2B07E3F200812D1A /* Teapot.ply in Resources */ = {isa = PBXBuildFile; fileRef = 452299AD2B07E3F200812D1A /* Teapot.ply */; };
 		452299B72B07E77B00812D1A /* earcut in Frameworks */ = {isa = PBXBuildFile; productRef = 452299B62B07E77B00812D1A /* earcut */; };
 		452299C02B07F0A300812D1A /* SIMDSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 452299BF2B07F0A300812D1A /* SIMDSupport */; };
-		452299C92B08063D00812D1A /* ExtrusionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299C82B08063D00812D1A /* ExtrusionView.swift */; };
 		452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CC2B08103B00812D1A /* Path+Extensions.swift */; };
 		452299CF2B0832B900812D1A /* Inspectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452299CE2B0832B900812D1A /* Inspectors.swift */; };
 		452299D22B0832E100812D1A /* SwiftFormats in Frameworks */ = {isa = PBXBuildFile; productRef = 452299D12B0832E100812D1A /* SwiftFormats */; };
@@ -52,7 +51,6 @@
 		452299A02B07DE1200812D1A /* Projections.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Projections.swift; sourceTree = "<group>"; };
 		452299A42B07E1C400812D1A /* BallRotationModifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BallRotationModifier.swift; sourceTree = "<group>"; };
 		452299AD2B07E3F200812D1A /* Teapot.ply */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Teapot.ply; sourceTree = "<group>"; };
-		452299C82B08063D00812D1A /* ExtrusionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrusionView.swift; sourceTree = "<group>"; };
 		452299CC2B08103B00812D1A /* Path+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Path+Extensions.swift"; sourceTree = "<group>"; };
 		452299CE2B0832B900812D1A /* Inspectors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Inspectors.swift; sourceTree = "<group>"; };
 		4564DED72B1FAC2A00A76C03 /* GeometryX */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GeometryX; sourceTree = "<group>"; };
@@ -153,7 +151,6 @@
 			children = (
 				4522998E2B07DC8B00812D1A /* SoftwareRendererView.swift */,
 				4504788E2B0AB69D00267CA8 /* MeshView.swift */,
-				452299C82B08063D00812D1A /* ExtrusionView.swift */,
 				4517B4B52B093D78008A0863 /* BoxesView.swift */,
 				452299CE2B0832B900812D1A /* Inspectors.swift */,
 				452299A42B07E1C400812D1A /* BallRotationModifier.swift */,
@@ -267,7 +264,6 @@
 				4504788F2B0AB69D00267CA8 /* MeshView.swift in Sources */,
 				452299CD2B08103B00812D1A /* Path+Extensions.swift in Sources */,
 				4522997D2B07DC3C00812D1A /* ProjectionDemoApp.swift in Sources */,
-				452299C92B08063D00812D1A /* ExtrusionView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
