@@ -1,7 +1,5 @@
 import Foundation
-import SwiftUI
-import RealityKit
-import ModelIO
+import simd
 
 public extension TrivialMesh where Vertex == SimpleVertex {
     init(cylinder: Cylinder, segments: Int) {
@@ -32,8 +30,6 @@ public extension TrivialMesh where Vertex == SimpleVertex {
         }
         self = TrivialMesh(merging: [top, bottom, makeEdge()])
         assert(self.isValid)
-        try! self.write(to: URL(filePath: "/tmp/test.obj"))
-        try! self.write(to: URL(filePath: "/tmp/test.ply"))
     }
 
     init(circleRadius radius: Float, segments: Int) {
