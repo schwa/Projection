@@ -16,10 +16,10 @@ public extension TrivialMesh where Vertex == SimpleVertex {
                 let p1 = SIMD3(cos(startAngle) * cylinder.radius, sin(startAngle) * cylinder.radius, 0)
                 let p2 = SIMD3(cos(endAngle) * cylinder.radius, sin(endAngle) * cylinder.radius, 0)
                 let vertices = [
-                    p1 + SIMD3<Float>(0, 0, -halfDepth),
-                    p2 + SIMD3<Float>(0, 0, -halfDepth),
-                    p1 + SIMD3<Float>(0, 0, halfDepth),
-                    p2 + SIMD3<Float>(0, 0, halfDepth)
+                    p1 + [0, 0, -halfDepth],
+                    p2 + [0, 0, -halfDepth],
+                    p1 + [0, 0, halfDepth],
+                    p2 + [0, 0, halfDepth]
                 ]
                 .map {
                     SimpleVertex(position: $0, normal: simd_normalize($0), textureCoordinate: [0, 0])
