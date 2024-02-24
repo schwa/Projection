@@ -18,6 +18,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0"),
         .package(url: "https://github.com/schwa/earcut-swift", branch: "main"),
         .package(url: "https://github.com/schwa/SwiftGraphics", branch: "jwight/develop"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.3.0"),
     ],
     targets: [
         .target(
@@ -35,5 +36,13 @@ let package = Package(
             dependencies: ["GeometryX"],
             swiftSettings: [.interoperabilityMode(.Cxx)]
         ),
+        .executableTarget(
+            name: "TrivialMeshCLI",
+            dependencies: [
+                "GeometryX",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ],
+            swiftSettings: [.interoperabilityMode(.Cxx)]
+        )
     ]
 )
