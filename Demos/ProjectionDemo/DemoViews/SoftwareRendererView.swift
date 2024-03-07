@@ -7,6 +7,7 @@ import CoreGraphicsSupport
 import SwiftFormats
 import GeometryX
 
+
 struct SoftwareRendererView: View {
     @State
     var camera: Camera

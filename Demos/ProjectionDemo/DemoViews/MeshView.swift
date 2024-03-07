@@ -77,6 +77,12 @@ struct MeshView: View {
                 }
             }
         }
+        // TODO: Can't do this without exposing Projection3D somehow
+//        .gesture(SpatialTapGesture().onEnded({ value in
+//            let location = SIMD2<Float>(value.location)
+//            //gluUnproject(win: SIMD3<Float>(location, 0.0), modelView: <#T##simd_float4x4#>, proj: <#T##simd_float4x4#>, viewOrigin: <#T##SIMD2<Float>#>, viewSize: <#T##SIMD2<Float>#>)
+//        }))
+
         .onAppear {
             source = Self.sources.first
         }

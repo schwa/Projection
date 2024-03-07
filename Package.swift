@@ -16,9 +16,14 @@ let package = Package(
             name: "Projection",
             targets: ["Projection"]),
     ],
+    dependencies: [
+        .package(url: "https://github.com/schwa/SwiftGraphics", branch: "jwight/develop"),
+    ],
     targets: [
         .target(
-            name: "Projection"),
+            name: "Projection",
+            dependencies: [.product(name: "SIMDSupport", package: "SwiftGraphics")]
+            ),
         .testTarget(
             name: "ProjectionTests",
             dependencies: ["Projection"]),
