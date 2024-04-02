@@ -1,3 +1,5 @@
+*** Code has moved to https://github.com/schwa/SwiftGraphics/ ***
+
 # Projection
 
 ## Description
